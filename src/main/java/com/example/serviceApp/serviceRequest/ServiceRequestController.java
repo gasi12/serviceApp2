@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/services")
 public class ServiceRequestController {
 
     private final ServiceRequestService serviceRequestService;
