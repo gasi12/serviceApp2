@@ -1,4 +1,4 @@
-package com.example.serviceApp.appUser;
+package com.example.serviceApp.Customer;
 
 import com.example.serviceApp.serviceRequest.ServiceRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Table
 @Entity
-public class AppUser {
+//@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +26,10 @@ public class AppUser {
 
     private Long phoneNumber;
 
-    @OneToMany(mappedBy = "appUser", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<ServiceRequest> serviceRequestList;
 
-    public AppUser(String userName, Long phoneNumber, List<ServiceRequest> serviceRequestList) {
+    public Customer(String userName, Long phoneNumber, List<ServiceRequest> serviceRequestList) {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.serviceRequestList = serviceRequestList;

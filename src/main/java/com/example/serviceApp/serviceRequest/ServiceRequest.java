@@ -1,6 +1,6 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.appUser.AppUser;
+import com.example.serviceApp.Customer.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,13 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +18,7 @@ import java.util.Date;
 
 @Table
 @Entity
-
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ServiceRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,21 +40,21 @@ public class ServiceRequest {
 
     private Long price;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "appuser_id")
+    @JoinColumn(name = "customer_id")
     @JsonIgnore
-    private AppUser appUser;
+    private Customer customer;
 
     public ServiceRequest(String description) {
         this.description = description;
     }
 
-    public ServiceRequest(String description, Status status, LocalDate endDate, LocalDate startDate, Long price, AppUser appUser) {
+    public ServiceRequest(String description, Status status, LocalDate endDate, LocalDate startDate, Long price, Customer customer) {
         this.description = description;
         this.status = status;
         this.endDate = endDate;
         this.startDate = startDate;
         this.price = price;
-        this.appUser = appUser;
+        this.customer = customer;
     }
 
     public enum Status {

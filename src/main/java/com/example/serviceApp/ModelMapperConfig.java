@@ -18,7 +18,8 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<ServiceRequest, ServiceRequestWithUserNameDto>() {
             @Override
             protected void configure() {
-                map().setPhoneNumber(source.getAppUser().getPhoneNumber());
+                map().setPhoneNumber(source.getCustomer().getPhoneNumber());
+                map().setUserName(source.getCustomer().getUserName());
 //                map().setStartDate(source.getStartDate());
             }
         });

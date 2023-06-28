@@ -34,8 +34,11 @@ public class ServiceRequestController {
         serviceRequestService.deleteById(id);
     }
     @GetMapping("/service-requests-with-user-name")
-    public List<ServiceRequestWithUserNameDto> getAllServiceRequestsWithUserName() {
-        return serviceRequestService.findAllServiceRequestsWithUserName();
+    public List<ServiceRequestWithUserNameDto> getAllServiceRequestsWithUserName(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize)
+            {
+        return serviceRequestService.findAllServiceRequestsWithUserName(pageNo, pageSize);
     }
     @GetMapping("/service/status/{status}")
     public List<ServiceRequest> findAllByStatus(@PathVariable ServiceRequest.Status status){

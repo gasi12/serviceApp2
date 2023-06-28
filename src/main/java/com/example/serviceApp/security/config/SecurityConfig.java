@@ -35,52 +35,61 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private  final AuthenticationProvider authenticationProvider;
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","PATCH","DELETE"));
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList("*")); // Allow all origins
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow specific HTTP methods
+//        configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
+//        configuration.setAllowCredentials(true); // Allow credentials (e.g. cookies, authorization headers)
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("*", configuration);
+//        return source;
+//    }
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("*").allowedOrigins("*");
+                registry.addMapping("*").allowedOrigins("*").allowedMethods("*");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("GET", "POST", "DELETE", "PUT");
+
             }
         };
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        http.headers().frameOptions().disable();
+//        http.headers().frameOptions().disable(); //????
 //
-//        http
-//                .csrf()
-//                .disable()
-//                .cors()
-//                .disable()
-//                .authorizeHttpRequests()
-//                .requestMatchers("/auth/**")
+        http.cors().and()
+                .csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .requestMatchers("/auth/**")
+                .permitAll()
+                .requestMatchers(toH2Console())
+                .permitAll()
+                .requestMatchers("/swagger-ui/**")
+                .permitAll()
+                .requestMatchers("/v3/api-docs/**")
+                .permitAll()
+//                .requestMatchers("/saveappuserdumb/**")
 //                .permitAll()
-//                .requestMatchers(toH2Console())
-//                .permitAll()
-//                .requestMatchers("/swagger-ui/**")
-//                .permitAll()
-//                .requestMatchers("/v3/api-docs/**")
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authenticationProvider(authenticationProvider)
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        http.csrf().disable().authorizeRequests().anyRequest().permitAll();
-        http.cors(cors -> cors.disable());
+                .anyRequest()
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+
+       // http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+       // http.cors(cors -> cors.disable());
         return http.build();
     }
 
