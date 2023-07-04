@@ -1,6 +1,6 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.Customer.Customer;
+import com.example.serviceApp.customer.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import io.swagger.v3.oas.annotations.media.Schema;

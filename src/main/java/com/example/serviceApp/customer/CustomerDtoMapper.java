@@ -1,4 +1,4 @@
-package com.example.serviceApp.Customer;
+package com.example.serviceApp.customer;
 
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class CustomerDtoMapper {
     public static CustomerDto mapToCustomerDto(Customer user) {
         return CustomerDto.builder()
                 .id(user.getId())
-                .name(user.getUserName())
+                .userName(user.getUserName())
                 .phoneNumber(user.getPhoneNumber())
                 .build();
     }

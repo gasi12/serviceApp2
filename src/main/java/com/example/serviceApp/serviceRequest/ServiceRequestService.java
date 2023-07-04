@@ -1,7 +1,7 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.Customer.Customer;
-import com.example.serviceApp.Customer.CustomerRepository;
+import com.example.serviceApp.customer.Customer;
+import com.example.serviceApp.customer.CustomerRepository;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;

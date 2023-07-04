@@ -1,4 +1,4 @@
-package com.example.serviceApp.Customer;
+package com.example.serviceApp.customer;
 
 import com.example.serviceApp.serviceRequest.ServiceRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;

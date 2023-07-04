@@ -1,4 +1,4 @@
-package com.example.serviceApp.Customer;
+package com.example.serviceApp.customer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CustomerDto {
     private Long id;
-    private String name;
+    private String userName;
     private Long phoneNumber;
-    //private List<ServiceRequestDto> serviceRequestList;
 }
