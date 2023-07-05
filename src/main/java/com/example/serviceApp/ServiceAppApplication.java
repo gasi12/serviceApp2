@@ -11,17 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebMvc
 @SpringBootApplication
 public class ServiceAppApplication {
-//	@Bean
-//	public WebMvcConfigurer corsConfigurer() {
-//		return new WebMvcConfigurer() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/**")
-//						.allowedOrigins("*")
-//						.allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
-//			}
-//		};
-//	}
+
 //	@Bean
 //	public ModelMapper modelMapper() {
 //		return new ModelMapper();

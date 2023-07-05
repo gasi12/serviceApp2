@@ -8,10 +8,12 @@ import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.security.config.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -56,11 +58,13 @@ private final AuthenticationManager authenticationManager;
             return null;
         }
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        String refreshToken = jwtService.generateRefreshToken(user);
 
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).build();
     }
+
     public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request) {
-        // suppose request have unique customer userName and password
+
         Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber()).orElseThrow();
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -69,8 +73,23 @@ private final AuthenticationManager authenticationManager;
                 )
         );
         var jwtToken = jwtService.generateToken(customer);
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        var refreshToken = jwtService.generateRefreshToken(customer);
+
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).build();
     }
+    public ResponseEntity refreshAuthentication( TokenRequest request){
+        String refreshToken = request.getToken();
+        UserDetails userDetails = jwtService.getUserDetails(refreshToken);
+        if(jwtService.isTokenValid(refreshToken,userDetails) && jwtService.isRefreshToken(refreshToken)) {
+
+            String newJwtToken = jwtService.generateToken(userDetails);
+            String newRefreshToken = jwtService.generateRefreshToken(userDetails);
+            return ResponseEntity.ok(AuthenticationResponse.builder().token(newJwtToken).refreshToken(newRefreshToken).build());
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired refresh token");
+        }
+    }
+
     public User changePassword(PasswordChangeRequest request) {
         String email = request.getEmail();
         Optional<User> optionalUser = repository.findByEmail(email);
