@@ -20,7 +20,7 @@ public class ServiceRequestWithUserNameDto {
     private LocalDate startDate;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate endDate;
-    private String userName;
+    private String customerName;
     private Long phoneNumber;
     private Long price;
 }

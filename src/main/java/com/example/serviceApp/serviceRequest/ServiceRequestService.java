@@ -130,7 +130,7 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
             }
         }
         Customer customer = serviceRequest.getCustomer();
-        customer.setUserName(request.getUserName());
+        customer.setCustomerName(request.getCustomerName());
         customer.setPhoneNumber(request.getPhoneNumber());
         serviceRequest.setPrice(request.getPrice());
         serviceRequest.setDescription(request.getDescription());

@@ -13,7 +13,7 @@ public class CustomerDtoMapper {
     public static CustomerDto mapToCustomerDto(Customer user) {
         return CustomerDto.builder()
                 .id(user.getId())
-                .userName(user.getUserName())
+                .customerName(user.getCustomerName())
                 .phoneNumber(user.getPhoneNumber())
                 .build();
     }

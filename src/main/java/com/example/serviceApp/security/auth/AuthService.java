@@ -1,5 +1,8 @@
 package com.example.serviceApp.security.auth;
 
+import com.example.serviceApp.customer.Customer;
+import com.example.serviceApp.customer.CustomerAuthenticationRequest;
+import com.example.serviceApp.customer.CustomerRepository;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.security.User.Role;
@@ -18,6 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
 private final UserRepository repository;
+private final CustomerRepository customerRepository;
 private final PasswordEncoder passwordEncoder;
 private final JwtService jwtService;
 private final AuthenticationManager authenticationManager;
@@ -40,20 +44,32 @@ private final AuthenticationManager authenticationManager;
     }
 
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticateUser(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
+        User user = repository.findByEmail(request.getEmail()).orElseThrow();
         if(user.isPasswordChangeRequired()){
             return null;
         }
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
 
+    }
+    public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request) {
+        // suppose request have unique customer userName and password
+        Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber()).orElseThrow();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getPhoneNumber(),
+                        request.getPassword()
+                )
+        );
+        var jwtToken = jwtService.generateToken(customer);
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
     public User changePassword(PasswordChangeRequest request) {
         String email = request.getEmail();

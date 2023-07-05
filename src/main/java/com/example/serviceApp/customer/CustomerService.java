@@ -4,8 +4,10 @@ import com.example.serviceApp.serviceRequest.ServiceRequest;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +21,7 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public CustomerDto findUserById(Long id){
         return modelMapper.map(customerRepository.findById(id).orElseThrow(),CustomerDto.class);
@@ -44,31 +47,45 @@ public class CustomerService {
     @Transactional
 
     public Customer createUserWithoutChecking(Customer customer) {
-        Optional<Customer> newUser = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
+        Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
         List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
-        if (!newUser.isPresent()) {
+
+        Customer handledCustomer;
+        String password = null;
+        if (existingCustomer.isPresent()) {
+            handledCustomer = existingCustomer.get();
+            for (ServiceRequest s : serviceRequestList) {
+                s.setCustomer(handledCustomer);
+                s.setStatus(ServiceRequest.Status.PENDING);
+                handledCustomer.getServiceRequestList().add(s);
+            }
+        } else {
             for (ServiceRequest s : serviceRequestList) {
                 s.setCustomer(customer);
                 s.setStatus(ServiceRequest.Status.PENDING);
             }
-            customer.setServiceRequestList(serviceRequestList);
-            return customerRepository.save(customer);
-        }
-        Customer newCustomer = newUser.get();
-        for (ServiceRequest s : serviceRequestList) {
-            s.setCustomer(newCustomer);
-            s.setStatus(ServiceRequest.Status.PENDING);
-            newCustomer.getServiceRequestList().add(s);
-        }
-        newCustomer.setServiceRequestList(serviceRequestList);
-        return  customerRepository.save(newCustomer);
+            password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+            // Bcrypt the generated password and set it to customer
+            customer.setPassword(passwordEncoder.encode(password));
 
+            handledCustomer = customer;
+            handledCustomer.setServiceRequestList(serviceRequestList);
+
+        }
+
+        Customer savedCustomer = customerRepository.save(handledCustomer);
+        if(password!=null)
+            savedCustomer.setPlainPassword(password);
+        // Assuming 'plainPassword' attribute to store plain password in customer response object.
+
+        return  savedCustomer;
     }
+
     @Transactional
     public Customer editUserById(Long id, CustomerDto user){
         Customer editedUser = customerRepository.getCustomerById(id).orElseThrow(()-> new IllegalArgumentException("user not found"));
-        if(!user.getUserName().isBlank())
-            editedUser.setUserName(user.getUserName());
+        if(!user.getCustomerName().isBlank())
+            editedUser.setCustomerName(user.getCustomerName());
         if(user.getPhoneNumber()!=null)
             editedUser.setPhoneNumber(user.getPhoneNumber());
        return customerRepository.save(editedUser);

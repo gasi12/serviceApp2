@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/authenticate")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequest request){
-        AuthenticationResponse response = authService.authenticate(request);
+        AuthenticationResponse response = authService.authenticateUser(request);
         if (response == null) {
             return ResponseEntity.badRequest().body("Password expired"); //todo na razie zadrutowane tak zeby dostac odpowiedz zamiast 403
         }
