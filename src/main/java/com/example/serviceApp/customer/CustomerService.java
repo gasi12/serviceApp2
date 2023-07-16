@@ -50,34 +50,30 @@ public class CustomerService {
         Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
         List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
 
-        Customer handledCustomer;
+        Customer handledCustomer = new Customer();
         String password = null;
         if (existingCustomer.isPresent()) {
             handledCustomer = existingCustomer.get();
+            handledCustomer.setCustomerName(customer.getCustomerName());
             for (ServiceRequest s : serviceRequestList) {
                 s.setCustomer(handledCustomer);
                 s.setStatus(ServiceRequest.Status.PENDING);
                 handledCustomer.getServiceRequestList().add(s);
             }
         } else {
-            for (ServiceRequest s : serviceRequestList) {
+        for (ServiceRequest s : serviceRequestList) {
                 s.setCustomer(customer);
                 s.setStatus(ServiceRequest.Status.PENDING);
             }
             password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
-            // Bcrypt the generated password and set it to customer
             customer.setPassword(passwordEncoder.encode(password));
-
             handledCustomer = customer;
+            handledCustomer.setCustomerName(customer.getCustomerName());
             handledCustomer.setServiceRequestList(serviceRequestList);
-
         }
-
         Customer savedCustomer = customerRepository.save(handledCustomer);
         if(password!=null)
             savedCustomer.setPlainPassword(password);
-        // Assuming 'plainPassword' attribute to store plain password in customer response object.
-
         return  savedCustomer;
     }
 

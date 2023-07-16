@@ -45,7 +45,7 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails){
-       return generateToken(new HashMap<>(),userDetails,(1000*60L));
+       return generateToken(new HashMap<>(),userDetails,(100000*60L));
     }
     public String generateToken(
             Map<String, Object> extraClaims,
@@ -80,7 +80,7 @@ public class JwtService {
     }
 
     public boolean isRefreshToken(String token) {
-        final Claims claims = extractAllClaims(token);
+         Claims claims = extractAllClaims(token);
         Object isRefresh = claims.get("isRefreshToken");
         return isRefresh != null && (Boolean) isRefresh;
     }

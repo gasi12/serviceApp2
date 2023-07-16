@@ -50,7 +50,8 @@ public class ServiceRequestService {
     public ServiceRequest addServiceToUser(Long id, ServiceRequestDto requestDto) {
         ServiceRequest newService = new ServiceRequest();
         newService.setDescription(requestDto.getDescription());
-        Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() -> new IllegalArgumentException("user doenst exist"));
+        Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() ->
+                new IllegalArgumentException("user doenst exist"));
         newService.setCustomer(newServiceUser);
         return serviceRequestRepository.save(newService);
     }

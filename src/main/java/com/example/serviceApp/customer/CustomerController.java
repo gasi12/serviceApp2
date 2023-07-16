@@ -1,6 +1,8 @@
 package com.example.serviceApp.customer;
 
+import com.example.serviceApp.chat.TicketHandshakeInterceptor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,12 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+
+    @GetMapping("/generateticket")//todo postawic to w jakis madrzejszy controller, tu dziala ale jest burdel
+    public String generateTicket() {
+
+        return TicketHandshakeInterceptor.generateAndStoreTicket();
+    }
 
 
     @PostMapping("/savecustomerdumb")
