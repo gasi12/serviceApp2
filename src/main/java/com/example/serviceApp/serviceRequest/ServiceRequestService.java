@@ -60,16 +60,7 @@ public class ServiceRequestService {
         return serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
     }
 
-//    public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {//todo out of bounds
-//        List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
-//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
-//        Page<ServiceRequest> page = serviceRequestRepository.findAll(paging);
-//        List<ServiceRequest> serviceRequests = page.getContent();
-//        for (ServiceRequest s : serviceRequests) {
-//            serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
-//        }
-//        return serviceRequestDtos;
-//    }
+
 public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {
     List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
     Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
@@ -81,14 +72,6 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
     return serviceRequestDtos;
 }
 
-//public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {
-//    List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
-//    List<ServiceRequest> serviceRequests = serviceRequestRepository.findAll();
-//    for (ServiceRequest s : serviceRequests) {
-//        serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
-//    }
-//    return serviceRequestDtos;
-//}
 
 
     public List<ServiceRequest> findAllByStatus(ServiceRequest.Status status) {
