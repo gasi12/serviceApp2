@@ -29,7 +29,7 @@ public class Customer implements UserDetails {
     private String customerName;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private String password; // The password is set upon customer creation as mentioned
+    private String password;
 
     private Long phoneNumber;
 
@@ -46,7 +46,7 @@ public class Customer implements UserDetails {
         this.customerName = customerName;
         this.phoneNumber = phoneNumber;
         this.serviceRequestList = serviceRequestList;
-        this.password = password; // set password
+        this.password = password;
     }
 
     @Override
