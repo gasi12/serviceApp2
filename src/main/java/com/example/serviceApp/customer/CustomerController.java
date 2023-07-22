@@ -5,6 +5,7 @@ import com.example.serviceApp.chat.TicketHandshakeInterceptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,5 +51,12 @@ public class CustomerController {
     @GetMapping("/customer/getall")
     public List<CustomerDto> findAllCustomers() {
         return customerService.findAllCustomers();
+    }
+    @DeleteMapping("/customer/{id}")
+    public ResponseEntity deleteCustomer(@PathVariable Long id){
+        if(customerService.deleteCustomerById(id)){
+            return ResponseEntity.ok().build();
+        }
+        else return ResponseEntity.badRequest().build();
     }
 }

@@ -88,4 +88,13 @@ public class CustomerService {
             editedCustomer.setPhoneNumber(customer.getPhoneNumber());
        return customerRepository.save(editedCustomer);
     }
+
+    public boolean deleteCustomerById(Long id) {
+        if(customerRepository.existsById(id)){
+            customerRepository.deleteById(id);
+            return true;
+        }
+        else
+            return false;
+    }
 }
