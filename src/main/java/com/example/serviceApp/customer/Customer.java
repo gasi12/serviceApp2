@@ -2,6 +2,7 @@ package com.example.serviceApp.customer;
 
 import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class Customer implements UserDetails {
     private Long id;
 
     private String customerName;
-
+@JsonIgnore
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String password;
 
@@ -48,7 +49,7 @@ public class Customer implements UserDetails {
         this.serviceRequestList = serviceRequestList;
         this.password = password;
     }
-
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority((role.name())));
@@ -58,27 +59,27 @@ public class Customer implements UserDetails {
     public String getPassword() {
         return password;
     }
-
+@JsonIgnore
     @Override
     public String getUsername() {
         return phoneNumber.toString(); // customer's username
     }
-
+@JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
-
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

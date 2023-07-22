@@ -23,13 +23,13 @@ public class CustomerService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomerDto findUserById(Long id){
-        return modelMapper.map(customerRepository.findById(id).orElseThrow(),CustomerDto.class);
+    public CustomerWithRequestsDto findCustomerById(Long id){
+        return modelMapper.map(customerRepository.findById(id).orElseThrow(),CustomerWithRequestsDto.class);
     }
-    public Customer findUserByIdWithDetails(Long id){
+    public Customer findCustomerByIdWithDetails(Long id){
         return customerRepository.findById(id).orElseThrow();
     }
-    public List<CustomerDto> findAllUsers(){
+    public List<CustomerDto> findAllCustomers(){
         List<Customer> customers = customerRepository.findAll();
         List<CustomerDto> customerDto = new ArrayList<>();
         for(Customer c:customers){
@@ -38,19 +38,20 @@ public class CustomerService {
         return customerDto;
     }
 
-    public CustomerDto findUserByPhoneNumber(Long phoneNumber){
+    public CustomerWithRequestsDto findCustomerByPhoneNumber(Long phoneNumber){
         return modelMapper.map(
                 customerRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
                         new IllegalArgumentException("not found")),
-                CustomerDto.class);
+                CustomerWithRequestsDto.class);
     }
     @Transactional
 
-    public Customer createUserWithoutChecking(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
         List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
 
         Customer handledCustomer = new Customer();
+
         String password = null;
         if (existingCustomer.isPresent()) {
             handledCustomer = existingCustomer.get();
@@ -71,6 +72,7 @@ public class CustomerService {
             handledCustomer.setCustomerName(customer.getCustomerName());
             handledCustomer.setServiceRequestList(serviceRequestList);
         }
+
         Customer savedCustomer = customerRepository.save(handledCustomer);
         if(password!=null)
             savedCustomer.setPlainPassword(password);
@@ -78,12 +80,12 @@ public class CustomerService {
     }
 
     @Transactional
-    public Customer editUserById(Long id, CustomerDto user){
-        Customer editedUser = customerRepository.getCustomerById(id).orElseThrow(()-> new IllegalArgumentException("user not found"));
-        if(!user.getCustomerName().isBlank())
-            editedUser.setCustomerName(user.getCustomerName());
-        if(user.getPhoneNumber()!=null)
-            editedUser.setPhoneNumber(user.getPhoneNumber());
-       return customerRepository.save(editedUser);
+    public Customer editCustomerById(Long id, CustomerDto customer){
+        Customer editedCustomer = customerRepository.getCustomerById(id).orElseThrow(()-> new IllegalArgumentException("customer not found"));
+        if(!customer.getCustomerName().isBlank())
+            editedCustomer.setCustomerName(customer.getCustomerName());
+        if(customer.getPhoneNumber()!=null)
+            editedCustomer.setPhoneNumber(customer.getPhoneNumber());
+       return customerRepository.save(editedCustomer);
     }
 }
