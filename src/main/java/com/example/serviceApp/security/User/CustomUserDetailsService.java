@@ -1,6 +1,7 @@
 package com.example.serviceApp.security.User;
 
 
+import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElse(null);
 
         if (user != null) {
-            if (user.isPasswordChangeRequired()) {
-                throw new IllegalArgumentException("change password");//todo exception change
-            }
             return user;
         }
 

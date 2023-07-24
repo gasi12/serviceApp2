@@ -3,22 +3,23 @@ package com.example.serviceApp.security.auth;
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerAuthenticationRequest;
 import com.example.serviceApp.customer.CustomerRepository;
+import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.security.config.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -54,8 +55,10 @@ private final AuthenticationManager authenticationManager;
                 )
         );
         User user = repository.findByEmail(request.getEmail()).orElseThrow();
+
         if(user.isPasswordChangeRequired()){
-            return null;
+            log.info("PASSWORD  CHANGE REQUERIEDF");
+            throw new PasswordChangeRequiredException ("password change required");
         }
         String jwtToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);

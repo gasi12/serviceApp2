@@ -1,5 +1,6 @@
 package com.example.serviceApp.serviceRequest;
 
+import com.example.serviceApp.customExeptions.NoContentException;
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerRepository;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -57,14 +58,18 @@ public class ServiceRequestService {
     }
 
     public ServiceRequest findById(Long id) {
-        return serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        return serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("service with id "+id +" not found"));
     }
 
 
 public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {
+    if (pageNo < 0 || pageSize <= 0) {
+        throw new IllegalArgumentException("Invalid page number or size");
+    }
     List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
     Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
     Page<ServiceRequest> page = serviceRequestRepository.findAll(pageable);
+
     List<ServiceRequest> serviceRequests = page.getContent();
     for (ServiceRequest s : serviceRequests) {
         serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
@@ -89,14 +94,13 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
     public ServiceRequest updateServiceRequest(Long id, ServiceRequestDto serviceRequestDto) {
         try {
             ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Service request not found"));
+                    .orElseThrow(() -> new RuntimeException("Service request with id "+id+" not found"));
 
             objectMapper.updateValue(serviceRequest, serviceRequestDto);
 
             return serviceRequestRepository.save(serviceRequest);
         } catch (JsonMappingException e) {
-            // Handle the exception
-            // For example, you can log the error or throw a custom exception
+
             throw new RuntimeException("Error updating service request", e);
         }
     }
@@ -106,7 +110,7 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
     public ServiceRequest updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {//todo zmapowac tego potwora ifowego
 
         ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service request not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Service request with id" +id+ " not found"));
         Optional<Customer> user = customerRepository.findByPhoneNumber(request.getPhoneNumber());
         if (user.isPresent()) {
             if (!serviceRequest.getCustomer().getPhoneNumber().equals(user.get().getPhoneNumber())) {

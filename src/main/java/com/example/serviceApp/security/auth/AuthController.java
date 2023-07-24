@@ -1,6 +1,7 @@
 package com.example.serviceApp.security.auth;
 
 
+import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
 import com.example.serviceApp.customer.CustomerAuthenticationRequest;
 import com.example.serviceApp.security.User.User;
 import com.sun.net.httpserver.Authenticator;
@@ -33,12 +34,9 @@ public class AuthController {
     @PostMapping("/authenticate")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequest request){
         AuthenticationResponse response = authService.authenticateUser(request);
-        if (response == null) {
-            return ResponseEntity.badRequest().body("Password expired"); //todo na razie zadrutowane tak zeby dostac odpowiedz zamiast 403
-        }
-
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/customer/authenticate")
     public ResponseEntity authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
         AuthenticationResponse response = authService.authenticateCustomer(request);

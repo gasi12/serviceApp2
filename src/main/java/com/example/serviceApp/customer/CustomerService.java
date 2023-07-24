@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +23,11 @@ public class CustomerService {
     private final PasswordEncoder passwordEncoder;
 
     public CustomerWithRequestsDto findCustomerById(Long id){
-        return modelMapper.map(customerRepository.findById(id).orElseThrow(),CustomerWithRequestsDto.class);
+
+        return modelMapper.map(customerRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("user with id " + id +" not found")),CustomerWithRequestsDto.class);
     }
     public Customer findCustomerByIdWithDetails(Long id){
-        return customerRepository.findById(id).orElseThrow();
+        return customerRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("user with id " + id +" not found"));
     }
     public List<CustomerDto> findAllCustomers(){
         List<Customer> customers = customerRepository.findAll();
@@ -41,7 +41,7 @@ public class CustomerService {
     public CustomerWithRequestsDto findCustomerByPhoneNumber(Long phoneNumber){
         return modelMapper.map(
                 customerRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
-                        new IllegalArgumentException("not found")),
+                        new IllegalArgumentException("user with number "+ phoneNumber + "does not exist")),
                 CustomerWithRequestsDto.class);
     }
     @Transactional
@@ -50,7 +50,7 @@ public class CustomerService {
         Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
         List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
 
-        Customer handledCustomer = new Customer();
+        Customer handledCustomer;
 
         String password = null;
         if (existingCustomer.isPresent()) {
@@ -81,7 +81,7 @@ public class CustomerService {
 
     @Transactional
     public Customer editCustomerById(Long id, CustomerDto customer){
-        Customer editedCustomer = customerRepository.getCustomerById(id).orElseThrow(()-> new IllegalArgumentException("customer not found"));
+        Customer editedCustomer = customerRepository.getCustomerById(id).orElseThrow(()-> new IllegalArgumentException("customer with id " + id + " not found"));
         if(!customer.getCustomerName().isBlank())
             editedCustomer.setCustomerName(customer.getCustomerName());
         if(customer.getPhoneNumber()!=null)

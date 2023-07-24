@@ -6,8 +6,5 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class Greeting {
-
     private String content;
-
-
 }
