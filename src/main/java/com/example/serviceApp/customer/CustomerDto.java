@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CustomerDto {
     private Long id;
-    private String customerName;
+    private String firstName;
+    private String lastName;
     private Long phoneNumber;
 }

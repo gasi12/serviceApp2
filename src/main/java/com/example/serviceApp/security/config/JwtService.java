@@ -1,5 +1,6 @@
 package com.example.serviceApp.security.config;
 
+import com.example.serviceApp.customer.CustomerUserDetailsService;
 import com.example.serviceApp.security.User.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,10 +22,16 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
     private final CustomUserDetailsService userDetailsService;
+    private final CustomerUserDetailsService customerUserDetailsService;
     private static final String SECRET_KEY ="KQrSEqVRHxIPgBLuLhMRIHrPzme94ofdV9Siwsa0B1me3Hj4ZHhNM0LRZKMLacoR";
     public String extractUsername(String token) {
+
         return extractClaim(token,Claims::getSubject);
     }
+    public String extractUserType(String token) {
+        return extractClaim(token, claims -> claims.get("userType", String.class));
+    }
+
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -43,10 +50,14 @@ public class JwtService {
         claims.put("isRefreshToken", true);
         return generateToken(claims, userDetails, 1000*60*60*24L);
     }
-
-    public String generateToken(UserDetails userDetails){
-       return generateToken(new HashMap<>(),userDetails,(100000*60L));
+    public String generateToken(UserDetails userDetails, String userType){
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userType", userType);
+        return generateToken(extraClaims, userDetails, (100000*60L));
     }
+//    public String generateToken(UserDetails userDetails){
+//       return generateToken(new HashMap<>(),userDetails,(100000*60L));
+//    }
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails,
@@ -87,7 +98,15 @@ public class JwtService {
 
     public UserDetails getUserDetails(String token) {
         final String username = extractUsername(token);
-        // Assuming you have a UserDetailsService bean to fetch UserDetails
-        return userDetailsService.loadUserByUsername(username);
+        final String userType = extractUserType(token);
+
+        UserDetails userDetails;
+        if ("customer".equals(userType)) {
+            userDetails = customerUserDetailsService.loadUserByUsername(username);
+        } else {
+            userDetails = userDetailsService.loadUserByUsername(username);
+        }
+
+        return userDetails;
     }
 }

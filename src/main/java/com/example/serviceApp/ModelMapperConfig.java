@@ -19,7 +19,7 @@ public class ModelMapperConfig {
             @Override
             protected void configure() {
                 map().setPhoneNumber(source.getCustomer().getPhoneNumber());
-                map().setCustomerName(source.getCustomer().getCustomerName());
+                //map().setCustomerName(source.getCustomer().getFirstName());
 //                map().setStartDate(source.getStartDate());
             }
         });

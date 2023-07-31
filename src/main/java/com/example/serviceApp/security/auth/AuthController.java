@@ -2,6 +2,7 @@ package com.example.serviceApp.security.auth;
 
 
 import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
+import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerAuthenticationRequest;
 import com.example.serviceApp.security.User.User;
 import com.sun.net.httpserver.Authenticator;
@@ -31,13 +32,13 @@ public class AuthController {
         return ResponseEntity.ok(response); // Return ok response with AuthenticationResponse
     }
 
-    @PostMapping("/authenticate")
+    @PostMapping("/authenticate/user")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequest request){
         AuthenticationResponse response = authService.authenticateUser(request);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/customer/authenticate")
+    @PostMapping("/authenticate/customer")
     public ResponseEntity authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
         AuthenticationResponse response = authService.authenticateCustomer(request);
         log.info("Logged user:" +SecurityContextHolder.getContext().getAuthentication().getName());
@@ -46,13 +47,21 @@ public class AuthController {
         }
         return ResponseEntity.ok(response);
     }
-    @PostMapping("/password")
-    public User changePassword(@RequestBody PasswordChangeRequest request){
+    @PostMapping("/password/user")
+    public User changeUserPassword(@RequestBody PasswordChangeRequest request){
 //        if(authService.changePassword(request)){
 //            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 //        }
 //        return new ResponseEntity<Error>(HttpStatus.BAD_REQUEST);
-        return authService.changePassword(request);
+        return authService.changeUserPassword(request);
+    }
+    @PostMapping("/password/customer")
+    public Customer changeCustomerPassword(@RequestBody PasswordChangeRequest request){
+//        if(authService.changePassword(request)){
+//            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+//        }
+//        return new ResponseEntity<Error>(HttpStatus.BAD_REQUEST);
+        return authService.changeCustomerPassword(request);
     }
     @PostMapping("/refresh")
     public ResponseEntity refreshAuthentication(@RequestBody TokenRequest request){

@@ -12,7 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 public class CustomerWithRequestsDto {
     private Long id;
-    private String customerName;
+    private String firstName;
+    private String lastName;
     private Long phoneNumber;
     private List<ServiceRequest> serviceRequestList;
 }

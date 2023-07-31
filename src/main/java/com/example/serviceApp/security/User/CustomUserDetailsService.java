@@ -23,14 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElse(null);
 
-        if (user != null) {
             return user;
-        }
 
-        // If user is not found, check for customer //todo rozbic to na dwa sie da?
-        Customer customer = customerRepository.findByPhoneNumber(Long.parseLong(username))
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return customer;
+
     }
 }

@@ -33,34 +33,36 @@ private final AuthenticationManager authenticationManager;
         if (exist.isPresent()){
             return null; // Return null or throw an exception to indicate that the email is already taken
         }
-        var user = User.builder()
+        var user = User.userBuilder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        user.setRole(Role.ADMIN);
+        //user.setRole(Role.ADMIN);
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.generateToken(user,"user");
         return AuthenticationResponse.builder().token(jwtToken).build(); // Return AuthenticationResponse with JWT token
     }
 
 
     public AuthenticationResponse authenticateUser(AuthenticationRequest request) {
+        log.info("email: " +request.getEmail()+", password: "+request.getPassword());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
-        User user = repository.findByEmail(request.getEmail()).orElseThrow();
+        log.info("email: " +request.getEmail()+", password: "+request.getPassword());
+        User user = repository.findByEmail(request.getEmail()).orElseThrow(()-> new IllegalArgumentException("user not found"));
 
         if(user.isPasswordChangeRequired()){
             log.info("PASSWORD  CHANGE REQUERIEDF");
             throw new PasswordChangeRequiredException ("password change required");
         }
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user,"user");
         String refreshToken = jwtService.generateRefreshToken(user);
 
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).build();
@@ -75,7 +77,7 @@ private final AuthenticationManager authenticationManager;
                         request.getPassword()
                 )
         );
-        var jwtToken = jwtService.generateToken(customer);
+        var jwtToken = jwtService.generateToken(customer,"customer");
         var refreshToken = jwtService.generateRefreshToken(customer);
 
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).build();
@@ -85,7 +87,7 @@ private final AuthenticationManager authenticationManager;
         UserDetails userDetails = jwtService.getUserDetails(refreshToken);
         if(jwtService.isTokenValid(refreshToken,userDetails) && jwtService.isRefreshToken(refreshToken)) {
 
-            String newJwtToken = jwtService.generateToken(userDetails);
+            String newJwtToken = jwtService.generateToken(userDetails,"user");
             String newRefreshToken = jwtService.generateRefreshToken(userDetails);
             return ResponseEntity.ok(AuthenticationResponse.builder().token(newJwtToken).refreshToken(newRefreshToken).build());
         } else {
@@ -93,10 +95,10 @@ private final AuthenticationManager authenticationManager;
         }
     }
 
-    public User changePassword(PasswordChangeRequest request) {
-        String email = request.getEmail();
+    public User changeUserPassword(PasswordChangeRequest request) {
+        String email = request.getLogin();
         Optional<User> optionalUser = repository.findByEmail(email);
-
+log.info(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             String oldPassword = request.getOldPassword();
@@ -115,4 +117,26 @@ private final AuthenticationManager authenticationManager;
             throw new IllegalArgumentException("User not found");
         }
     }
+    public Customer changeCustomerPassword(PasswordChangeRequest request) {
+        Long phoneNumber = Long.parseLong(request.getLogin());  // Assume phone number is string in request
+        Optional<Customer> optionalCustomer = customerRepository.findByPhoneNumber(phoneNumber);
+
+        if (optionalCustomer.isPresent()) {
+            Customer customer = optionalCustomer.get();
+            String oldPassword = request.getOldPassword();
+            String newPassword = request.getNewPassword();
+
+            if (passwordEncoder.matches(oldPassword, customer.getPassword())) {
+                String encodedPassword = passwordEncoder.encode(newPassword);
+                customer.setPassword(encodedPassword);
+                return customerRepository.save(customer);
+
+            } else {
+                throw new IllegalArgumentException("Invalid old password");
+            }
+        } else {
+            throw new IllegalArgumentException("Customer not found");
+        }
+    }
+
 }
