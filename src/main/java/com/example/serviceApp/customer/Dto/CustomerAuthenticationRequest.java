@@ -1,4 +1,4 @@
-package com.example.serviceApp.customer;
+package com.example.serviceApp.customer.Dto;
 
 
 import lombok.AllArgsConstructor;
