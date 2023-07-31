@@ -1,21 +1,16 @@
 package com.example.serviceApp.security.auth;
 
 
-import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
 import com.example.serviceApp.customer.Customer;
-import com.example.serviceApp.customer.CustomerAuthenticationRequest;
+import com.example.serviceApp.customer.Dto.CustomerAuthenticationRequest;
 import com.example.serviceApp.security.User.User;
-import com.sun.net.httpserver.Authenticator;
+import com.example.serviceApp.security.auth.Dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
