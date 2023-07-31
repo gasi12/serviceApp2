@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +25,17 @@ public class GlobalExceptionHandler {
         errorMessage.setMessage(e.getMessage());
         return errorMessage;
     }
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorMessage handleAuthenticationException(AuthenticationException e) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorMessage.setError("auth error");
+        errorMessage.setMessage(e.getMessage());
+        return errorMessage;
+    }
+
 
     @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
