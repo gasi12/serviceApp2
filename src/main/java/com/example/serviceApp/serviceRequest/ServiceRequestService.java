@@ -118,7 +118,8 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
             }
         }
         Customer customer = serviceRequest.getCustomer();
-        customer.setCustomerName(request.getCustomerName());
+        customer.setFirstName(request.getFirstName());
+        customer.setLastName(request.getLastName());
         customer.setPhoneNumber(request.getPhoneNumber());
         serviceRequest.setPrice(request.getPrice());
         serviceRequest.setDescription(request.getDescription());

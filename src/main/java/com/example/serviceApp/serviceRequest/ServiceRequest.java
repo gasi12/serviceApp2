@@ -1,6 +1,7 @@
 package com.example.serviceApp.serviceRequest;
 
 import com.example.serviceApp.customer.Customer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 //import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,7 +25,7 @@ public class ServiceRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(insertable=false, updatable=false)
     //@Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     private String description;
@@ -35,13 +36,13 @@ public class ServiceRequest {
     private LocalDate endDate;
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate startDate;
 
     private Long price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    @JsonIgnore
+    @JsonBackReference
     private Customer customer;
 
     public ServiceRequest(String description) {
