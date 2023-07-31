@@ -8,8 +8,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class HelloMessage {
     private Long id;
-    private String name;
-    //private String author;
+    private String content;
+    private String author;
     public HelloMessage() {
 
 }

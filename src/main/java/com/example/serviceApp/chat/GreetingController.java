@@ -22,8 +22,8 @@ public class GreetingController {
     public void orderGreeting(@DestinationVariable Long id, HelloMessage message, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         Thread.sleep(1000); // simulated delay
         Map<String, Object> sessionAttributes = headerAccessor.getSessionAttributes();
-        String userName = (String) sessionAttributes.get("userName");
-      simpMessagingTemplate.convertAndSend("/topic/greetings/" + id, new Greeting("Message: "+message.getName()+"id: "+ id+" " +userName));
+        String userName = (String) sessionAttributes.getOrDefault("userName","null");
+      simpMessagingTemplate.convertAndSend("/topic/greetings/" + id, new HelloMessage(id,message.getContent(),userName));
 
 
     }
