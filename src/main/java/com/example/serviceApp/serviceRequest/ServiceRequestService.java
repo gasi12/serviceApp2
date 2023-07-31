@@ -1,13 +1,15 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.customExeptions.NoContentException;
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerRepository;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -107,8 +109,7 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
 
 
     @Transactional
-    public ServiceRequest updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {//todo zmapowac tego potwora ifowego
-
+    public ServiceRequest updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {
         ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Service request with id" +id+ " not found"));
         Optional<Customer> user = customerRepository.findByPhoneNumber(request.getPhoneNumber());
@@ -118,12 +119,8 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
             }
         }
         Customer customer = serviceRequest.getCustomer();
-        customer.setFirstName(request.getFirstName());
-        customer.setLastName(request.getLastName());
-        customer.setPhoneNumber(request.getPhoneNumber());
-        serviceRequest.setPrice(request.getPrice());
-        serviceRequest.setDescription(request.getDescription());
-        serviceRequest.setStatus(request.getStatus());
+        modelMapper.map(request, customer);
+        modelMapper.map(request, serviceRequest);
         if (serviceRequest.getStatus().equals(ServiceRequest.Status.FINISHED)) {
             serviceRequest.setEndDate(LocalDate.now());
         }

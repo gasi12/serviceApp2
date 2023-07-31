@@ -1,5 +1,7 @@
 package com.example.serviceApp.customer;
 
+import com.example.serviceApp.customer.Dto.CustomerDto;
+import com.example.serviceApp.customer.Dto.CustomerWithRequestsDto;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
 
 import jakarta.transaction.Transactional;
@@ -44,70 +46,69 @@ public class CustomerService {
                         new IllegalArgumentException("user with number "+ phoneNumber + "does not exist")),
                 CustomerWithRequestsDto.class);
     }
+    public Customer createNewCustomer(Customer newCustomer) {
+        String password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+        newCustomer.setPassword(passwordEncoder.encode(password));
+        updateCustomerServiceRequests(newCustomer);
+        Customer savedCustomer = customerRepository.save(newCustomer);
+        savedCustomer.setPlainPassword(password);
+        return savedCustomer;
+    }
 
+    public Customer updateExistingCustomer(Customer existingCustomer, Customer updatedCustomer) {
+        existingCustomer.setFirstName(updatedCustomer.getFirstName());
+        existingCustomer.setLastName(updatedCustomer.getLastName());
+        updateCustomerServiceRequests(existingCustomer);
+        return customerRepository.save(existingCustomer);
+    }
 
+    private void updateCustomerServiceRequests(Customer customer) {
+        List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
+        for (ServiceRequest s : serviceRequestList) {
+            s.setCustomer(customer);
+            s.setStatus(ServiceRequest.Status.PENDING);
+        }
+    }
+    public Customer createCustomer(Customer customer) {
+        Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
+        return existingCustomer.isPresent()
+                ? updateExistingCustomer(existingCustomer.get(), customer)
+                : createNewCustomer(customer);
+    }
+//    @Transactional
 //    public Customer createCustomer(Customer customer) {
 //        Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
 //        List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
 //
 //        Customer handledCustomer;
-//
 //        String password = null;
+//
 //        if (existingCustomer.isPresent()) {
 //            handledCustomer = existingCustomer.get();
-//            handledCustomer.setFirstName(customer.getFirstName());
-//            for (ServiceRequest s : serviceRequestList) {
-//                s.setCustomer(handledCustomer);
-//                s.setStatus(ServiceRequest.Status.PENDING);
-//                handledCustomer.getServiceRequestList().add(s);
-//            }
 //        } else {
-//        for (ServiceRequest s : serviceRequestList) {
-//                s.setCustomer(customer);
-//                s.setStatus(ServiceRequest.Status.PENDING);
-//            }
 //            password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
 //            customer.setPassword(passwordEncoder.encode(password));
 //            handledCustomer = customer;
-//            handledCustomer.setFirstName(customer.getFirstName());
-//            handledCustomer.setServiceRequestList(serviceRequestList);
+//        }
+//
+//        handledCustomer.setFirstName(customer.getFirstName());
+//        handledCustomer.setServiceRequestList(serviceRequestList);
+//
+//        for (ServiceRequest s : serviceRequestList) {
+//            s.setCustomer(handledCustomer);
+//            s.setStatus(ServiceRequest.Status.PENDING);
 //        }
 //
 //        Customer savedCustomer = customerRepository.save(handledCustomer);
-//        if(password!=null)
+//
+//        if(password != null) {
 //            savedCustomer.setPlainPassword(password);
-//        return  savedCustomer;
+//        }
+//
+//        return savedCustomer;
 //    }
+
 @Transactional
-public Customer createCustomer(Customer customer) {
-    List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
-    serviceRequestList.forEach(s -> s.setStatus(ServiceRequest.Status.PENDING));
-
-    Customer handledCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber())
-            .map(existingCustomer -> updateExistingCustomer(existingCustomer, serviceRequestList))
-            .orElseGet(() -> createNewCustomer(customer, serviceRequestList));
-
-    return customerRepository.save(handledCustomer);
-}
-
-
-    private Customer updateExistingCustomer(Customer existingCustomer, List<ServiceRequest> serviceRequestList) {
-        serviceRequestList.forEach(s -> {
-            s.setCustomer(existingCustomer);
-            existingCustomer.getServiceRequestList().add(s);
-        });
-
-  return existingCustomer;
-    }
-    private Customer createNewCustomer(Customer newCustomer, List<ServiceRequest> serviceRequestList) {
-        String password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
-        newCustomer.setPassword(passwordEncoder.encode(password));
-        newCustomer.setPlainPassword(password);
-        newCustomer.setServiceRequestList(serviceRequestList);
-        serviceRequestList.forEach(s -> s.setCustomer(newCustomer));
-        return newCustomer;
-    }
-    @Transactional
     public Customer editCustomerById(Long id, CustomerDto customer){
         Customer editedCustomer = customerRepository.getCustomerById(id).orElseThrow(()-> new IllegalArgumentException("customer with id " + id + " not found"));
         if(!customer.getFirstName().isBlank())

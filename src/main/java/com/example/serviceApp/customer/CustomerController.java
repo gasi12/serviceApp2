@@ -2,9 +2,9 @@ package com.example.serviceApp.customer;
 
 import com.example.serviceApp.chat.ChatTicket;
 import com.example.serviceApp.chat.TicketHandshakeInterceptor;
+import com.example.serviceApp.customer.Dto.CustomerDto;
+import com.example.serviceApp.customer.Dto.CustomerWithRequestsDto;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

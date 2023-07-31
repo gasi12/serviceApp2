@@ -1,7 +1,8 @@
 package com.example.serviceApp;
 
+import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
-import com.example.serviceApp.serviceRequest.ServiceRequestWithUserNameDto;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +19,15 @@ public class ModelMapperConfig {
         modelMapper.addMappings(new PropertyMap<ServiceRequest, ServiceRequestWithUserNameDto>() {
             @Override
             protected void configure() {
-                map().setPhoneNumber(source.getCustomer().getPhoneNumber());
-                //map().setCustomerName(source.getCustomer().getFirstName());
-//                map().setStartDate(source.getStartDate());
+                modelMapper.typeMap(ServiceRequestWithUserNameDto.class, ServiceRequest.class)
+                        .addMappings(mapper -> {
+                            mapper.skip(ServiceRequest::setId);
+                            mapper.skip(ServiceRequest::setStartDate);
+                            mapper.skip(ServiceRequest::setEndDate);
+                        });
+                modelMapper.typeMap(ServiceRequestWithUserNameDto.class, Customer.class)
+                        .addMappings(mapper -> mapper.skip(Customer::setId));
+
             }
         });
         return modelMapper;
