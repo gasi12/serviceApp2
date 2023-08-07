@@ -1,6 +1,7 @@
 package com.example.serviceApp.security.auth;
 
 import com.example.serviceApp.customer.Customer;
+import com.example.serviceApp.customer.CustomerDetailsService;
 import com.example.serviceApp.customer.Dto.CustomerAuthenticationRequest;
 import com.example.serviceApp.customer.CustomerRepository;
 import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
@@ -14,8 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +28,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-private final UserRepository repository;
+private final UserRepository UserRepository;
 private final CustomerRepository customerRepository;
 private final PasswordEncoder passwordEncoder;
 private final JwtService jwtService;
 private final AuthenticationManager authenticationManager;
+private final CustomerDetailsService CustomerDetailsService;
     public AuthenticationResponse register(RegisterRequest request) {
-        Optional<User> exist = repository.findByEmail(request.getEmail());
+        Optional<User> exist = UserRepository.findByEmail(request.getEmail());
         if (exist.isPresent()){
             return null; // Return null or throw an exception to indicate that the email is already taken
         }
@@ -42,7 +47,7 @@ private final AuthenticationManager authenticationManager;
                 .role(Role.USER)
                 .build();
         //user.setRole(Role.ADMIN);
-        repository.save(user);
+        UserRepository.save(user);
         var jwtToken = jwtService.generateToken(user,"user");
         return AuthenticationResponse.builder().token(jwtToken).build(); // Return AuthenticationResponse with JWT token
     }
@@ -57,7 +62,7 @@ private final AuthenticationManager authenticationManager;
                 )
         );
         log.info("email: " +request.getEmail()+", password: "+request.getPassword());
-        User user = repository.findByEmail(request.getEmail()).orElseThrow(()-> new IllegalArgumentException("user not found"));
+        User user = UserRepository.findByEmail(request.getEmail()).orElseThrow(()-> new IllegalArgumentException("user not found"));
 
         if(user.isPasswordChangeRequired()){
             log.info("PASSWORD  CHANGE REQUERIEDF");
@@ -70,18 +75,29 @@ private final AuthenticationManager authenticationManager;
     }
 
     public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request) {
+        log.info("Phone Number: " + request.getPhoneNumber());
 
-        Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber()).orElseThrow();
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getPhoneNumber(),
-                        request.getPassword()
-                )
-        );
-        var jwtToken = jwtService.generateToken(customer,"customer");
+        Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber()));
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getPhoneNumber(),
+                            request.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid phone number or password");
+        }
+
+        var jwtToken = jwtService.generateToken(customer, "customer");
         var refreshToken = jwtService.generateRefreshToken(customer);
 
-        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).build();
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
     }
     public ResponseEntity refreshAuthentication( TokenRequest request){
         String refreshToken = request.getToken();
@@ -98,7 +114,7 @@ private final AuthenticationManager authenticationManager;
 
     public User changeUserPassword(PasswordChangeRequest request) {
         String email = request.getLogin();
-        Optional<User> optionalUser = repository.findByEmail(email);
+        Optional<User> optionalUser = UserRepository.findByEmail(email);
 log.info(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -109,7 +125,7 @@ log.info(email);
                 String encodedPassword = passwordEncoder.encode(newPassword);
                 user.setPassword(encodedPassword);
                 user.setPasswordChangeRequired(false);
-                return repository.save(user);
+                return UserRepository.save(user);
 
             } else {
                 throw new IllegalArgumentException("Invalid old password");
