@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
+
 @Service
 @RequiredArgsConstructor
 
@@ -36,7 +36,7 @@ public class ServiceRequestService {
         return serviceRequestRepository.findAll();
     }
 
-    @Transactional
+
     public void deleteById(Long id) {
         boolean exist = serviceRequestRepository.existsById(id);
         if (exist) {
@@ -51,10 +51,10 @@ public class ServiceRequestService {
     }
     @Transactional
     public ServiceRequest addServiceToUser(Long id, ServiceRequestDto requestDto) {
-        ServiceRequest newService = new ServiceRequest();
-        newService.setDescription(requestDto.getDescription());
+        ServiceRequest newService = modelMapper.map(requestDto,ServiceRequest.class);
+
         Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() ->
-                new IllegalArgumentException("user doenst exist"));
+                new IllegalArgumentException("user doesnt exist"));
         newService.setCustomer(newServiceUser);
         return serviceRequestRepository.save(newService);
     }
@@ -94,17 +94,14 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
 
     @Transactional
     public ServiceRequest updateServiceRequest(Long id, ServiceRequestDto serviceRequestDto) {
-        try {
-            ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
+
+        ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Service request with id "+id+" not found"));
+serviceRequest.setDescription(serviceRequestDto.getDescription());
+serviceRequest.setStatus(serviceRequestDto.getStatus());
+serviceRequest.setPrice(serviceRequestDto.getPrice());//todo mapper mi nie dziala wiec na sztywniaka zrobione
+  return  serviceRequestRepository.save(serviceRequest);
 
-            objectMapper.updateValue(serviceRequest, serviceRequestDto);
-
-            return serviceRequestRepository.save(serviceRequest);
-        } catch (JsonMappingException e) {
-
-            throw new RuntimeException("Error updating service request", e);
-        }
     }
 
 
