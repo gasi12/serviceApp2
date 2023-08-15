@@ -8,7 +8,6 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class GreetingController {
     @Autowired
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
-    @MessageMapping("/hello/{id}")
+    @MessageMapping("/hello/{id}")//todo po co testowac skoro wydaje ci sie ze powinno dzialac
     public void orderGreeting(@DestinationVariable Long id, ChatMessage message, SimpMessageHeaderAccessor headerAccessor) throws Exception {
         Thread.sleep(1000); // simulated delay
         ChatMessage chatMessage = new ChatMessage();
