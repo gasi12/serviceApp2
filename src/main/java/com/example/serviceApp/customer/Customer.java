@@ -29,24 +29,14 @@ import java.util.List;
 
 public class Customer extends UserImplementation {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
-
-//@JsonIgnore
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-//    private String password;
 
     private Long phoneNumber;
 
     @Transient
     private String plainPassword;
 
-//    @Enumerated(EnumType.STRING)
-//    private Role role = Role.CUSTOMER; // They are always initialized with CUSTOMER role
 @JsonManagedReference
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ServiceRequest> serviceRequestList;
 
  
@@ -54,6 +44,12 @@ public class Customer extends UserImplementation {
     public String getUsername() {
         return phoneNumber.toString();
     }
-
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "phoneNumber=" + phoneNumber +
+                ", serviceRequestList=" + serviceRequestList.size() +
+                '}';
+    }
 
 }
