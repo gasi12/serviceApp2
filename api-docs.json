@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "x-stoplight": {
-    "id": "hb72zdy3ceu1g"
+    "id": "s92uqcoy900v0"
   },
   "info": {
     "title": "OpenAPI definition",
@@ -14,6 +14,309 @@
     }
   ],
   "paths": {
+    "/chatMessages": {
+      "get": {
+        "tags": [
+          "chat-message-entity-controller"
+        ],
+        "description": "get-chatmessage",
+        "operationId": "getCollectionResource-chatmessage-get_1",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Zero-based page index (0..N)",
+            "required": false,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "The size of the page to be returned",
+            "required": false,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedModelEntityModelChatMessage"
+                }
+              },
+              "application/x-spring-data-compact+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedModelEntityModelChatMessage"
+                }
+              },
+              "text/uri-list": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "u9wofis7cuu7r"
+        }
+      },
+      "post": {
+        "tags": [
+          "chat-message-entity-controller"
+        ],
+        "description": "create-chatmessage",
+        "operationId": "postCollectionResource-chatmessage-post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatMessageRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "bpjzfmujg7b9v"
+        }
+      }
+    },
+    "/chatMessages/search/findByServiceId": {
+      "get": {
+        "tags": [
+          "chat-message-search-controller"
+        ],
+        "operationId": "executeSearch-chatmessage-get",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionModelEntityModelChatMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "sna433mxa67iy"
+        }
+      }
+    },
+    "/chatMessages/{id}": {
+      "get": {
+        "tags": [
+          "chat-message-entity-controller"
+        ],
+        "description": "get-chatmessage",
+        "operationId": "getItemResource-chatmessage-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "rx20bock2a7gh"
+        }
+      },
+      "put": {
+        "tags": [
+          "chat-message-entity-controller"
+        ],
+        "description": "update-chatmessage",
+        "operationId": "putItemResource-chatmessage-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatMessageRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "x-stoplight": {
+          "id": "cz84vdc6jesyc"
+        }
+      },
+      "delete": {
+        "tags": [
+          "chat-message-entity-controller"
+        ],
+        "description": "delete-chatmessage",
+        "operationId": "deleteItemResource-chatmessage-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "rag49qqiqibhj"
+        }
+      },
+      "patch": {
+        "tags": [
+          "chat-message-entity-controller"
+        ],
+        "description": "patch-chatmessage",
+        "operationId": "patchItemResource-chatmessage-patch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatMessageRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "x-stoplight": {
+          "id": "ayql2spkrvi9k"
+        }
+      }
+    },
     "/customers": {
       "get": {
         "tags": [
@@ -80,7 +383,7 @@
           }
         },
         "x-stoplight": {
-          "id": "t71g2c9zlcqyv"
+          "id": "115gxwehw1a0g"
         }
       },
       "post": {
@@ -112,7 +415,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ut8yp6glr7pd6"
+          "id": "8swe1yd3qgzrn"
         }
       }
     },
@@ -148,7 +451,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ci698ypf7heuk"
+          "id": "x0n34afzonmsn"
         }
       }
     },
@@ -184,7 +487,7 @@
           }
         },
         "x-stoplight": {
-          "id": "m34xi3zp0q4ts"
+          "id": "i8z3h6dnvacvm"
         }
       }
     },
@@ -220,7 +523,7 @@
           }
         },
         "x-stoplight": {
-          "id": "o8hfxwkuvmkvj"
+          "id": "x36i9hwdhgoui"
         }
       }
     },
@@ -256,7 +559,7 @@
           }
         },
         "x-stoplight": {
-          "id": "f1mn069mtaizv"
+          "id": "m3c23o1kkqs47"
         }
       }
     },
@@ -285,7 +588,7 @@
           }
         },
         "x-stoplight": {
-          "id": "qraiaa4qvo9mw"
+          "id": "1jwxcsd25lji6"
         }
       }
     },
@@ -322,7 +625,7 @@
           }
         },
         "x-stoplight": {
-          "id": "sc8xqk7a1g0so"
+          "id": "woyor3unmh36k"
         }
       },
       "put": {
@@ -377,7 +680,7 @@
           }
         },
         "x-stoplight": {
-          "id": "w79c2f9hpaqey"
+          "id": "h2calec5ssn60"
         }
       },
       "delete": {
@@ -405,7 +708,7 @@
           }
         },
         "x-stoplight": {
-          "id": "wwyv9qsa3tx5k"
+          "id": "j0hfn5ro7vc8b"
         }
       },
       "patch": {
@@ -450,7 +753,7 @@
           }
         },
         "x-stoplight": {
-          "id": "j9stndv9aykjg"
+          "id": "q53rudjdzpfyf"
         }
       }
     },
@@ -492,7 +795,7 @@
           }
         },
         "x-stoplight": {
-          "id": "md8mwgyjr0tt5"
+          "id": "5r5swm9wc13ps"
         }
       },
       "put": {
@@ -557,7 +860,7 @@
           }
         },
         "x-stoplight": {
-          "id": "umjh3dmj2ngnb"
+          "id": "fi11rt636hrlk"
         }
       },
       "delete": {
@@ -585,7 +888,7 @@
           }
         },
         "x-stoplight": {
-          "id": "h77g8ifu78q9n"
+          "id": "zpyjbnxrhmrni"
         }
       },
       "patch": {
@@ -640,7 +943,7 @@
           }
         },
         "x-stoplight": {
-          "id": "tf1u78jxx11e9"
+          "id": "ec92j0jy4ti15"
         }
       }
     },
@@ -685,7 +988,7 @@
           }
         },
         "x-stoplight": {
-          "id": "cbfqaaumzzx2n"
+          "id": "yngt6jv07sgqr"
         }
       },
       "delete": {
@@ -721,7 +1024,7 @@
           }
         },
         "x-stoplight": {
-          "id": "5udu297dnpnhf"
+          "id": "kilps5ya3bnmr"
         }
       }
     },
@@ -744,11 +1047,11 @@
           }
         },
         "x-stoplight": {
-          "id": "ziqszfj7583n4"
+          "id": "01ye9b0cvdaew"
         }
       }
     },
-    "/profile/customers": {
+    "/profile/chatMessages": {
       "get": {
         "tags": [
           "profile-controller"
@@ -777,11 +1080,11 @@
           }
         },
         "x-stoplight": {
-          "id": "gkn98bod1ck05"
+          "id": "cl0oipdt3m0do"
         }
       }
     },
-    "/profile/serviceRequests": {
+    "/profile/customers": {
       "get": {
         "tags": [
           "profile-controller"
@@ -810,11 +1113,11 @@
           }
         },
         "x-stoplight": {
-          "id": "qjc34sxwfgts7"
+          "id": "i0x1hwh075w7c"
         }
       }
     },
-    "/profile/users": {
+    "/profile/serviceRequests": {
       "get": {
         "tags": [
           "profile-controller"
@@ -843,7 +1146,40 @@
           }
         },
         "x-stoplight": {
-          "id": "ww4aiaww5yrmt"
+          "id": "o3b469u6kxohj"
+        }
+      }
+    },
+    "/profile/users": {
+      "get": {
+        "tags": [
+          "profile-controller"
+        ],
+        "operationId": "descriptor_1_1_4",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/alps+json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/schema+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JsonSchema"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "nyncq04caq6q3"
         }
       }
     },
@@ -913,7 +1249,7 @@
           }
         },
         "x-stoplight": {
-          "id": "kiyfj3r84qaey"
+          "id": "p54q249az0my9"
         }
       },
       "post": {
@@ -945,7 +1281,7 @@
           }
         },
         "x-stoplight": {
-          "id": "lplkd2tn9g5hv"
+          "id": "wcq5xriz7t912"
         }
       }
     },
@@ -986,7 +1322,7 @@
           }
         },
         "x-stoplight": {
-          "id": "8lwda4t0xlm5d"
+          "id": "9d2ythgzzz368"
         }
       }
     },
@@ -1023,7 +1359,7 @@
           }
         },
         "x-stoplight": {
-          "id": "qo8z6nwo3ytkr"
+          "id": "g6yzlihqfa4pd"
         }
       },
       "put": {
@@ -1078,7 +1414,7 @@
           }
         },
         "x-stoplight": {
-          "id": "sx1kfyptxa1fs"
+          "id": "vbya9ip30q10c"
         }
       },
       "delete": {
@@ -1106,7 +1442,7 @@
           }
         },
         "x-stoplight": {
-          "id": "v54ttdiwz801o"
+          "id": "4li0drykai2st"
         }
       },
       "patch": {
@@ -1151,7 +1487,278 @@
           }
         },
         "x-stoplight": {
-          "id": "yl04vastxgd0p"
+          "id": "4n4x36flfn3qg"
+        }
+      }
+    },
+    "/serviceRequests/{id}/customer": {
+      "get": {
+        "tags": [
+          "service-request-property-reference-controller"
+        ],
+        "description": "get-customer-by-servicerequest-Id",
+        "operationId": "followPropertyReference-servicerequest-get_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelCustomer"
+                }
+              },
+              "text/uri-list": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "x4q1l6uj2c5t4"
+        }
+      },
+      "put": {
+        "tags": [
+          "service-request-property-reference-controller"
+        ],
+        "description": "update-customer-by-servicerequest-Id",
+        "operationId": "createPropertyReference-servicerequest-put",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionModelObject"
+              }
+            },
+            "application/x-spring-data-compact+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionModelObject"
+              }
+            },
+            "text/uri-list": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelCustomer"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelCustomer"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "x-stoplight": {
+          "id": "eq86uqz0w7er0"
+        }
+      },
+      "delete": {
+        "tags": [
+          "service-request-property-reference-controller"
+        ],
+        "description": "delete-customer-by-servicerequest-Id",
+        "operationId": "deletePropertyReference-servicerequest-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "eudhkby34zmdn"
+        }
+      },
+      "patch": {
+        "tags": [
+          "service-request-property-reference-controller"
+        ],
+        "description": "patch-customer-by-servicerequest-Id",
+        "operationId": "createPropertyReference-servicerequest-patch",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionModelObject"
+              }
+            },
+            "application/x-spring-data-compact+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionModelObject"
+              }
+            },
+            "text/uri-list": {
+              "schema": {
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelCustomer"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "x-stoplight": {
+          "id": "alrk5j1zwrsqn"
+        }
+      }
+    },
+    "/serviceRequests/{id}/customer/{propertyId}": {
+      "get": {
+        "tags": [
+          "service-request-property-reference-controller"
+        ],
+        "description": "get-customer-by-servicerequest-Id",
+        "operationId": "followPropertyReference-servicerequest-get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EntityModelCustomer"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "bz6realxm2gpq"
+        }
+      },
+      "delete": {
+        "tags": [
+          "service-request-property-reference-controller"
+        ],
+        "description": "delete-customer-by-servicerequest-Id",
+        "operationId": "deletePropertyReferenceId-servicerequest-delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "propertyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "x-stoplight": {
+          "id": "ikrbxjokqf4h2"
         }
       }
     },
@@ -1221,7 +1828,7 @@
           }
         },
         "x-stoplight": {
-          "id": "zafezsot10iy0"
+          "id": "jwpa3e0lmo5z8"
         }
       },
       "post": {
@@ -1253,7 +1860,7 @@
           }
         },
         "x-stoplight": {
-          "id": "3fh4nhv1nvrhx"
+          "id": "8uz8jgdnugh79"
         }
       }
     },
@@ -1288,7 +1895,7 @@
           }
         },
         "x-stoplight": {
-          "id": "36xkh5k408st7"
+          "id": "13go8p2liglan"
         }
       }
     },
@@ -1325,7 +1932,7 @@
           }
         },
         "x-stoplight": {
-          "id": "w9raoeot588vo"
+          "id": "indit7ijjzrce"
         }
       },
       "put": {
@@ -1380,7 +1987,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ai6nk1ylw1k2r"
+          "id": "1q2s0u43j7joc"
         }
       },
       "delete": {
@@ -1408,7 +2015,7 @@
           }
         },
         "x-stoplight": {
-          "id": "sfohr0kel3aji"
+          "id": "48mffbcsbm9r9"
         }
       },
       "patch": {
@@ -1453,7 +2060,7 @@
           }
         },
         "x-stoplight": {
-          "id": "4warg4j40cfvd"
+          "id": "l861tnjh93em7"
         }
       }
     },
@@ -1497,7 +2104,7 @@
           }
         },
         "x-stoplight": {
-          "id": "l2qz3hza4d63h"
+          "id": "nttgaz07shx3f"
         }
       },
       "put": {
@@ -1549,7 +2156,7 @@
           }
         },
         "x-stoplight": {
-          "id": "5q5wgr02tsoi1"
+          "id": "cr7c6t0tfe31y"
         }
       },
       "delete": {
@@ -1584,7 +2191,7 @@
           }
         },
         "x-stoplight": {
-          "id": "74esi9x8qd1pq"
+          "id": "r9v54f0yabq5x"
         }
       }
     },
@@ -1638,7 +2245,7 @@
           }
         },
         "x-stoplight": {
-          "id": "a5vwb8dvoao92"
+          "id": "8ylbc86dlfanh"
         }
       }
     },
@@ -1692,7 +2299,7 @@
           }
         },
         "x-stoplight": {
-          "id": "2bcu7s0ritrk9"
+          "id": "bth965nrkcldv"
         }
       }
     },
@@ -1736,7 +2343,7 @@
           }
         },
         "x-stoplight": {
-          "id": "p9ojoin1jb49h"
+          "id": "dxqj2icz23mil"
         }
       },
       "put": {
@@ -1788,7 +2395,7 @@
           }
         },
         "x-stoplight": {
-          "id": "mrlyg05s2rpsx"
+          "id": "vf8tu650ct46n"
         }
       },
       "delete": {
@@ -1830,7 +2437,7 @@
           }
         },
         "x-stoplight": {
-          "id": "jgrozk0o9m3zu"
+          "id": "zdidi7megzzd0"
         }
       }
     },
@@ -1873,7 +2480,7 @@
           }
         },
         "x-stoplight": {
-          "id": "4zt38x5m641ww"
+          "id": "vfcp1c3zpckm6"
         }
       }
     },
@@ -1916,7 +2523,7 @@
           }
         },
         "x-stoplight": {
-          "id": "hkl6iesx8sw6v"
+          "id": "hz7qfg1k5rum0"
         }
       }
     },
@@ -1959,16 +2566,16 @@
           }
         },
         "x-stoplight": {
-          "id": "47zjb219t9npl"
+          "id": "8zffpcm7cp9cx"
         }
       }
     },
-    "/auth/password": {
+    "/auth/password/user": {
       "post": {
         "tags": [
           "auth-controller"
         ],
-        "operationId": "changePassword",
+        "operationId": "changeUserPassword",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2002,21 +2609,21 @@
           }
         },
         "x-stoplight": {
-          "id": "tdb8geyk8vpwo"
+          "id": "bbp8e1on29r1h"
         }
       }
     },
-    "/auth/customer/authenticate": {
+    "/auth/password/customer": {
       "post": {
         "tags": [
           "auth-controller"
         ],
-        "operationId": "authenticateCustomer",
+        "operationId": "changeCustomerPassword",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CustomerAuthenticationRequest"
+                "$ref": "#/components/schemas/PasswordChangeRequest"
               }
             }
           },
@@ -2028,7 +2635,7 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/Customer"
                 }
               }
             }
@@ -2045,11 +2652,11 @@
           }
         },
         "x-stoplight": {
-          "id": "btjlnkouywu3h"
+          "id": "abrkcd6v82f6w"
         }
       }
     },
-    "/auth/authenticate": {
+    "/auth/authenticate/user": {
       "post": {
         "tags": [
           "auth-controller"
@@ -2088,7 +2695,50 @@
           }
         },
         "x-stoplight": {
-          "id": "oll1s0f3b8bed"
+          "id": "pzhjvcocqx6r9"
+        }
+      }
+    },
+    "/auth/authenticate/customer": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "authenticateCustomer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomerAuthenticationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "a4vfk1cxtawj9"
         }
       }
     },
@@ -2124,7 +2774,7 @@
           }
         },
         "x-stoplight": {
-          "id": "3ce74bp93h30v"
+          "id": "izbqzt2e5tf4d"
         }
       }
     },
@@ -2176,7 +2826,7 @@
           }
         },
         "x-stoplight": {
-          "id": "3grztxu1w3a2s"
+          "id": "ysmpk8k3e6d85"
         }
       }
     },
@@ -2234,7 +2884,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ipjh63gw4269n"
+          "id": "arvl479fssnd0"
         }
       }
     },
@@ -2267,7 +2917,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ws3l2eoxdsok4"
+          "id": "j0n6wt89gxrxc"
         }
       }
     },
@@ -2311,7 +2961,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ez0gaeny4v8se"
+          "id": "8grz8gw56jdg8"
         }
       }
     },
@@ -2355,7 +3005,7 @@
           }
         },
         "x-stoplight": {
-          "id": "d6y6385c5u52q"
+          "id": "xdby09a3q5jtr"
         }
       }
     },
@@ -2391,7 +3041,7 @@
           }
         },
         "x-stoplight": {
-          "id": "o5zfvg95p0ypd"
+          "id": "hr1zmwe5dcgkc"
         }
       }
     }
@@ -2413,7 +3063,7 @@
           }
         },
         "x-stoplight": {
-          "id": "0x8u0590pzm2u"
+          "id": "i36it01z6pc6h"
         }
       },
       "AbstractJsonSchemaPropertyObject": {
@@ -2427,7 +3077,7 @@
           }
         },
         "x-stoplight": {
-          "id": "p9tokaitc3d0m"
+          "id": "cijzbpzm1ib55"
         }
       },
       "Item": {
@@ -2450,7 +3100,7 @@
           }
         },
         "x-stoplight": {
-          "id": "2dua2pvssra3m"
+          "id": "p3dhonoouksu5"
         }
       },
       "JsonSchema": {
@@ -2488,7 +3138,7 @@
           }
         },
         "x-stoplight": {
-          "id": "dcr5bucawlyom"
+          "id": "8m90a0jj4l94u"
         }
       },
       "Links": {
@@ -2497,7 +3147,7 @@
           "$ref": "#/components/schemas/Link"
         },
         "x-stoplight": {
-          "id": "c0t8bdivzggy8"
+          "id": "fumkdozuxhq1v"
         }
       },
       "RepresentationModelObject": {
@@ -2508,76 +3158,32 @@
           }
         },
         "x-stoplight": {
-          "id": "hbwhxuh4konpw"
+          "id": "osfi4dit8kmco"
         }
       },
-      "Customer": {
+      "EntityModelChatMessage": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "customerName": {
+          "content": {
             "type": "string"
           },
-          "phoneNumber": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "plainPassword": {
-            "type": "string",
-            "readOnly": true
-          },
-          "role": {
-            "type": "string",
-            "readOnly": true,
-            "enum": [
-              "USER",
-              "CUSTOMER",
-              "ADMIN"
-            ]
-          },
-          "serviceRequestList": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ServiceRequest"
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "6mni83fubugad"
-        }
-      },
-      "EntityModelCustomer": {
-        "type": "object",
-        "properties": {
-          "customerName": {
+          "author": {
             "type": "string"
           },
-          "phoneNumber": {
+          "serviceId": {
             "type": "integer",
             "format": "int64"
           },
-          "plainPassword": {
+          "timestamp": {
             "type": "string",
-            "readOnly": true
-          },
-          "role": {
-            "type": "string",
-            "readOnly": true,
-            "enum": [
-              "USER",
-              "CUSTOMER",
-              "ADMIN"
-            ]
+            "format": "date-time"
           },
           "_links": {
             "$ref": "#/components/schemas/Links"
           }
         },
         "x-stoplight": {
-          "id": "kbolpihgocvjz"
+          "id": "0yrnf0pd7hstu"
         }
       },
       "PageMetadata": {
@@ -2601,19 +3207,19 @@
           }
         },
         "x-stoplight": {
-          "id": "kx8bk1p8952lu"
+          "id": "rokqrg07b3gv1"
         }
       },
-      "PagedModelEntityModelCustomer": {
+      "PagedModelEntityModelChatMessage": {
         "type": "object",
         "properties": {
           "_embedded": {
             "type": "object",
             "properties": {
-              "customers": {
+              "chatMessages": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
                 }
               }
             }
@@ -2626,58 +3232,19 @@
           }
         },
         "x-stoplight": {
-          "id": "tb2dhbycqm61i"
+          "id": "gqlrhhshvo8dv"
         }
       },
-      "ServiceRequest": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "readOnly": true
-          },
-          "description": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "IN_PROCESS",
-              "ON_HOLD",
-              "FINISHED"
-            ]
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "price": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
-        "x-stoplight": {
-          "id": "icgv64z0w0e9n"
-        }
-      },
-      "CollectionModelServiceRequest": {
+      "CollectionModelEntityModelChatMessage": {
         "type": "object",
         "properties": {
           "_embedded": {
             "type": "object",
             "properties": {
-              "serviceRequests": {
+              "chatMessages": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/ServiceRequestResponse"
+                  "$ref": "#/components/schemas/EntityModelChatMessage"
                 }
               }
             }
@@ -2687,132 +3254,20 @@
           }
         },
         "x-stoplight": {
-          "id": "ksk1ya4c6co8m"
-        }
-      },
-      "CollectionModelObject": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "objects": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "5wxb73vjl307y"
-        }
-      },
-      "EntityModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "IN_PROCESS",
-              "ON_HOLD",
-              "FINISHED"
-            ]
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "price": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "8zk9jminnvmhe"
-        }
-      },
-      "PagedModelEntityModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "serviceRequests": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          },
-          "page": {
-            "$ref": "#/components/schemas/PageMetadata"
-          }
-        },
-        "x-stoplight": {
-          "id": "lj4kg5onz05rc"
-        }
-      },
-      "CollectionModelEntityModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "serviceRequests": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "42k9cxlnk9r99"
+          "id": "xksb75x7p9qen"
         }
       },
       "EntityModelUser": {
         "type": "object",
         "properties": {
-          "firstname": {
+          "firstName": {
             "type": "string"
           },
-          "lastname": {
-            "type": "string"
-          },
-          "email": {
+          "lastName": {
             "type": "string"
           },
           "password": {
             "type": "string"
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
           },
           "role": {
             "type": "string",
@@ -2822,22 +3277,22 @@
               "ADMIN"
             ]
           },
-          "enabled": {
+          "passwordChangeRequired": {
             "type": "boolean"
           },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
+          "email": {
+            "type": "string"
           },
           "username": {
             "type": "string"
           },
-          "accountNonExpired": {
+          "enabled": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -2848,18 +3303,7 @@
           }
         },
         "x-stoplight": {
-          "id": "gvxlbdva6e93h"
-        }
-      },
-      "GrantedAuthority": {
-        "type": "object",
-        "properties": {
-          "authority": {
-            "type": "string"
-          }
-        },
-        "x-stoplight": {
-          "id": "ylzcdx6jjrl92"
+          "id": "ntmsk99729egk"
         }
       },
       "PagedModelEntityModelUser": {
@@ -2884,7 +3328,7 @@
           }
         },
         "x-stoplight": {
-          "id": "fppmb9g6ed12t"
+          "id": "15l2rim5h4nmk"
         }
       },
       "User": {
@@ -2894,20 +3338,14 @@
             "type": "integer",
             "format": "int32"
           },
-          "firstname": {
+          "firstName": {
             "type": "string"
           },
-          "lastname": {
-            "type": "string"
-          },
-          "email": {
+          "lastName": {
             "type": "string"
           },
           "password": {
             "type": "string"
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
           },
           "role": {
             "type": "string",
@@ -2917,22 +3355,22 @@
               "ADMIN"
             ]
           },
-          "enabled": {
+          "passwordChangeRequired": {
             "type": "boolean"
           },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
+          "email": {
+            "type": "string"
           },
           "username": {
             "type": "string"
           },
-          "accountNonExpired": {
+          "enabled": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -2940,54 +3378,153 @@
           }
         },
         "x-stoplight": {
-          "id": "93ewxrjt9y7l2"
+          "id": "z6uor7707sp15"
         }
       },
-      "CustomerRequestBody": {
+      "Customer": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int64"
+            "format": "int32"
           },
-          "customerName": {
+          "firstName": {
             "type": "string"
           },
-          "phoneNumber": {
-            "type": "integer",
-            "format": "int64"
+          "lastName": {
+            "type": "string"
           },
-          "plainPassword": {
-            "type": "string",
-            "readOnly": true
+          "password": {
+            "type": "string"
           },
           "role": {
             "type": "string",
-            "readOnly": true,
             "enum": [
               "USER",
               "CUSTOMER",
               "ADMIN"
             ]
           },
+          "passwordChangeRequired": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "plainPassword": {
+            "type": "string"
+          },
           "serviceRequestList": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ServiceRequest"
             }
+          },
+          "username": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
           }
         },
         "x-stoplight": {
-          "id": "3ebei7cksk61j"
+          "id": "4qpdc8282q2ck"
         }
       },
-      "ServiceRequestRequestBody": {
+      "EntityModelCustomer": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "CUSTOMER",
+              "ADMIN"
+            ]
+          },
+          "passwordChangeRequired": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "plainPassword": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "x-stoplight": {
+          "id": "ysfyujhyldbtf"
+        }
+      },
+      "PagedModelEntityModelCustomer": {
+        "type": "object",
+        "properties": {
+          "_embedded": {
+            "type": "object",
+            "properties": {
+              "customers": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EntityModelCustomer"
+                }
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "x-stoplight": {
+          "id": "7ru5mohw6y2qj"
+        }
+      },
+      "ServiceRequest": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int64",
-            "readOnly": true
+            "format": "int64"
           },
           "description": {
             "type": "string"
@@ -3008,16 +3545,271 @@
           },
           "startDate": {
             "type": "string",
-            "format": "date",
-            "readOnly": true
+            "format": "date"
           },
           "price": {
             "type": "integer",
             "format": "int64"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
           }
         },
         "x-stoplight": {
-          "id": "r43n2px8dv2ns"
+          "id": "ankpaor415nna"
+        }
+      },
+      "CollectionModelServiceRequest": {
+        "type": "object",
+        "properties": {
+          "_embedded": {
+            "type": "object",
+            "properties": {
+              "serviceRequests": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ServiceRequestResponse"
+                }
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "x-stoplight": {
+          "id": "fjsba7zm0yb7z"
+        }
+      },
+      "CollectionModelObject": {
+        "type": "object",
+        "properties": {
+          "_embedded": {
+            "type": "object",
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "x-stoplight": {
+          "id": "sfj9l62at4xiv"
+        }
+      },
+      "EntityModelServiceRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "IN_PROCESS",
+              "ON_HOLD",
+              "FINISHED"
+            ]
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "readOnly": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "x-stoplight": {
+          "id": "k31w0hu3w4zwi"
+        }
+      },
+      "PagedModelEntityModelServiceRequest": {
+        "type": "object",
+        "properties": {
+          "_embedded": {
+            "type": "object",
+            "properties": {
+              "serviceRequests": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EntityModelServiceRequest"
+                }
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageMetadata"
+          }
+        },
+        "x-stoplight": {
+          "id": "gkkgrqqyuwd2s"
+        }
+      },
+      "CollectionModelEntityModelServiceRequest": {
+        "type": "object",
+        "properties": {
+          "_embedded": {
+            "type": "object",
+            "properties": {
+              "serviceRequests": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EntityModelServiceRequest"
+                }
+              }
+            }
+          },
+          "_links": {
+            "$ref": "#/components/schemas/Links"
+          }
+        },
+        "x-stoplight": {
+          "id": "mb45u4c5ox66b"
+        }
+      },
+      "ChatMessageRequestBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "content": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "serviceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "x-stoplight": {
+          "id": "epf4r1p9rxokm"
+        }
+      },
+      "CustomerRequestBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "CUSTOMER",
+              "ADMIN"
+            ]
+          },
+          "passwordChangeRequired": {
+            "type": "boolean"
+          },
+          "phoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "plainPassword": {
+            "type": "string"
+          },
+          "serviceRequestList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "username": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonLocked": {
+            "type": "boolean"
+          }
+        },
+        "x-stoplight": {
+          "id": "9o1kv4qpvstdu"
+        }
+      },
+      "ServiceRequestRequestBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "IN_PROCESS",
+              "ON_HOLD",
+              "FINISHED"
+            ]
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date",
+            "readOnly": true
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customer": {
+            "type": "string"
+          }
+        },
+        "x-stoplight": {
+          "id": "5sgfaxj33yyl3"
         }
       },
       "ServiceRequestResponse": {
@@ -3042,8 +3834,7 @@
           },
           "startDate": {
             "type": "string",
-            "format": "date",
-            "readOnly": true
+            "format": "date"
           },
           "price": {
             "type": "integer",
@@ -3051,7 +3842,7 @@
           }
         },
         "x-stoplight": {
-          "id": "vbeeeu3p3d4mh"
+          "id": "uci9malq6jgxc"
         }
       },
       "UserRequestBody": {
@@ -3061,20 +3852,14 @@
             "type": "integer",
             "format": "int32"
           },
-          "firstname": {
+          "firstName": {
             "type": "string"
           },
-          "lastname": {
-            "type": "string"
-          },
-          "email": {
+          "lastName": {
             "type": "string"
           },
           "password": {
             "type": "string"
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
           },
           "role": {
             "type": "string",
@@ -3084,22 +3869,22 @@
               "ADMIN"
             ]
           },
-          "enabled": {
+          "passwordChangeRequired": {
             "type": "boolean"
           },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
+          "email": {
+            "type": "string"
           },
           "username": {
             "type": "string"
           },
-          "accountNonExpired": {
+          "enabled": {
             "type": "boolean"
           },
           "credentialsNonExpired": {
+            "type": "boolean"
+          },
+          "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
@@ -3107,7 +3892,7 @@
           }
         },
         "x-stoplight": {
-          "id": "8jq3ak63u6pae"
+          "id": "09gtfim0ltyls"
         }
       },
       "ServiceRequestDto": {
@@ -3146,7 +3931,7 @@
           }
         },
         "x-stoplight": {
-          "id": "g13zj6g1nms3n"
+          "id": "tgjq4zbtmo0i5"
         }
       },
       "ServiceRequestWithUserNameDto": {
@@ -3179,7 +3964,10 @@
             "format": "date",
             "readOnly": true
           },
-          "customerName": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string"
           },
           "phoneNumber": {
@@ -3192,7 +3980,7 @@
           }
         },
         "x-stoplight": {
-          "id": "9cfmsebagbe3d"
+          "id": "rm9is3xb00514"
         }
       },
       "CustomerDto": {
@@ -3202,7 +3990,10 @@
             "type": "integer",
             "format": "int64"
           },
-          "customerName": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string"
           },
           "phoneNumber": {
@@ -3211,7 +4002,7 @@
           }
         },
         "x-stoplight": {
-          "id": "6oro1qx8jq0oq"
+          "id": "pjra7tn0wv7kz"
         }
       },
       "RegisterRequest": {
@@ -3231,7 +4022,7 @@
           }
         },
         "x-stoplight": {
-          "id": "gw9995lnzrsz2"
+          "id": "dn7fb605rbvtt"
         }
       },
       "TokenRequest": {
@@ -3242,13 +4033,13 @@
           }
         },
         "x-stoplight": {
-          "id": "niay3x0791eqn"
+          "id": "tlwz2n8qcnr3t"
         }
       },
       "PasswordChangeRequest": {
         "type": "object",
         "properties": {
-          "email": {
+          "login": {
             "type": "string"
           },
           "oldPassword": {
@@ -3259,7 +4050,21 @@
           }
         },
         "x-stoplight": {
-          "id": "eviu9pktezyoa"
+          "id": "oycetsbf7mtut"
+        }
+      },
+      "AuthenticationRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "x-stoplight": {
+          "id": "7secjh6egwrm5"
         }
       },
       "CustomerAuthenticationRequest": {
@@ -3274,21 +4079,7 @@
           }
         },
         "x-stoplight": {
-          "id": "011y1tutmifv0"
-        }
-      },
-      "AuthenticationRequest": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          }
-        },
-        "x-stoplight": {
-          "id": "4p7n6g981qf9i"
+          "id": "9pmcg8aqbka5b"
         }
       },
       "ChatTicket": {
@@ -3299,7 +4090,7 @@
           }
         },
         "x-stoplight": {
-          "id": "3uca2pjzpebdt"
+          "id": "uwc6ej5bt1319"
         }
       },
       "CustomerWithRequestsDto": {
@@ -3309,7 +4100,10 @@
             "type": "integer",
             "format": "int64"
           },
-          "customerName": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
             "type": "string"
           },
           "phoneNumber": {
@@ -3324,7 +4118,7 @@
           }
         },
         "x-stoplight": {
-          "id": "gehst1oiflltz"
+          "id": "bxd832jnauwmj"
         }
       },
       "Link": {
@@ -3356,7 +4150,7 @@
           }
         },
         "x-stoplight": {
-          "id": "7fq3vvl6cskjp"
+          "id": "i5s9vktuwlrn8"
         }
       }
     }
