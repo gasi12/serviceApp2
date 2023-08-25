@@ -2,6 +2,7 @@ package com.example.serviceApp.security.User;
 
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 
 
@@ -11,5 +12,5 @@ import lombok.RequiredArgsConstructor;
 public enum Role {
 
     USER,
-    ADMIN
+    CUSTOMER, ADMIN
 }

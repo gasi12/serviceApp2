@@ -57,8 +57,8 @@ private final CustomUserDetailsService customUserDetailsService;
             // Check if the default admin user already exists in the database
             if (!userRepository.findByEmail(email).isPresent()) {
                 User admin = new User();
-               admin.setFirstname(firstname);
-               admin.setLastname(lastname);
+               admin.setFirstName(firstname);
+               admin.setLastName(lastname);
                admin.setEmail(email);
                admin.setRole(role);
                admin.setPassword(passwordEncoder.encode(password));

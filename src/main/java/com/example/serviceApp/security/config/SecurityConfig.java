@@ -35,40 +35,18 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private  final AuthenticationProvider authenticationProvider;
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("*")); // Allow all origins
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Allow specific HTTP methods
-//        configuration.setAllowedHeaders(Arrays.asList("*")); // Allow all headers
-//        configuration.setAllowCredentials(true); // Allow credentials (e.g. cookies, authorization headers)
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("*", configuration);
-//        return source;
-//    }
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("*").allowedOrigins("*").allowedMethods("*");
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("GET", "POST", "DELETE", "PUT");
 
-            }
-        };
-    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        http.headers().frameOptions().disable(); //????
-//
-        http.cors().and()
-                .csrf()
-                .disable()
+
+        http
+                .cors().and()
+
                 .authorizeHttpRequests()
                 .requestMatchers("/auth/**")
+                .permitAll()
+                .requestMatchers("/generateticket")
                 .permitAll()
                 .requestMatchers(toH2Console())
                 .permitAll()
@@ -76,19 +54,23 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/v3/api-docs/**")
                 .permitAll()
-                .anyRequest()
+                .requestMatchers("/gs-guide-websocket/**")
                 .permitAll()
-                // .authenticated()
+                .anyRequest()
+                //.permitAll()
+                 .authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .csrf()
+                .disable()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.headers().frameOptions().disable();
 
-       // http.csrf().disable().authorizeRequests().anyRequest().permitAll();
-       // http.cors(cors -> cors.disable());
+
         return http.build();
     }
 

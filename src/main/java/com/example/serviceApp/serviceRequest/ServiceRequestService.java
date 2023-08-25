@@ -2,11 +2,14 @@ package com.example.serviceApp.serviceRequest;
 
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerRepository;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin
+
 @Service
 @RequiredArgsConstructor
 
@@ -33,7 +36,7 @@ public class ServiceRequestService {
         return serviceRequestRepository.findAll();
     }
 
-    @Transactional
+
     public void deleteById(Long id) {
         boolean exist = serviceRequestRepository.existsById(id);
         if (exist) {
@@ -48,31 +51,27 @@ public class ServiceRequestService {
     }
     @Transactional
     public ServiceRequest addServiceToUser(Long id, ServiceRequestDto requestDto) {
-        ServiceRequest newService = new ServiceRequest();
-        newService.setDescription(requestDto.getDescription());
-        Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() -> new IllegalArgumentException("user doenst exist"));
+        ServiceRequest newService = modelMapper.map(requestDto,ServiceRequest.class);
+
+        Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() ->
+                new IllegalArgumentException("user doesnt exist"));
         newService.setCustomer(newServiceUser);
         return serviceRequestRepository.save(newService);
     }
 
     public ServiceRequest findById(Long id) {
-        return serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("not found"));
+        return serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("service with id "+id +" not found"));
     }
 
-//    public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {//todo out of bounds
-//        List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
-//        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
-//        Page<ServiceRequest> page = serviceRequestRepository.findAll(paging);
-//        List<ServiceRequest> serviceRequests = page.getContent();
-//        for (ServiceRequest s : serviceRequests) {
-//            serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
-//        }
-//        return serviceRequestDtos;
-//    }
+
 public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {
+    if (pageNo < 0 || pageSize <= 0) {
+        throw new IllegalArgumentException("Invalid page number or size");
+    }
     List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
     Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
     Page<ServiceRequest> page = serviceRequestRepository.findAll(pageable);
+
     List<ServiceRequest> serviceRequests = page.getContent();
     for (ServiceRequest s : serviceRequests) {
         serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
@@ -80,14 +79,6 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
     return serviceRequestDtos;
 }
 
-//public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {
-//    List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
-//    List<ServiceRequest> serviceRequests = serviceRequestRepository.findAll();
-//    for (ServiceRequest s : serviceRequests) {
-//        serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
-//    }
-//    return serviceRequestDtos;
-//}
 
 
     public List<ServiceRequest> findAllByStatus(ServiceRequest.Status status) {
@@ -103,26 +94,21 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
 
     @Transactional
     public ServiceRequest updateServiceRequest(Long id, ServiceRequestDto serviceRequestDto) {
-        try {
-            ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Service request not found"));
 
-            objectMapper.updateValue(serviceRequest, serviceRequestDto);
+        ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Service request with id "+id+" not found"));
+serviceRequest.setDescription(serviceRequestDto.getDescription());
+serviceRequest.setStatus(serviceRequestDto.getStatus());
+serviceRequest.setPrice(serviceRequestDto.getPrice());//todo mapper mi nie dziala wiec na sztywniaka zrobione
+  return  serviceRequestRepository.save(serviceRequest);
 
-            return serviceRequestRepository.save(serviceRequest);
-        } catch (JsonMappingException e) {
-            // Handle the exception
-            // For example, you can log the error or throw a custom exception
-            throw new RuntimeException("Error updating service request", e);
-        }
     }
 
 
     @Transactional
-    public ServiceRequest updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {//todo zmapowac tego potwora ifowego
-
+    public ServiceRequest updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {
         ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service request not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Service request with id" +id+ " not found"));
         Optional<Customer> user = customerRepository.findByPhoneNumber(request.getPhoneNumber());
         if (user.isPresent()) {
             if (!serviceRequest.getCustomer().getPhoneNumber().equals(user.get().getPhoneNumber())) {
@@ -130,11 +116,8 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
             }
         }
         Customer customer = serviceRequest.getCustomer();
-        customer.setUserName(request.getUserName());
-        customer.setPhoneNumber(request.getPhoneNumber());
-        serviceRequest.setPrice(request.getPrice());
-        serviceRequest.setDescription(request.getDescription());
-        serviceRequest.setStatus(request.getStatus());
+        modelMapper.map(request, customer);
+        modelMapper.map(request, serviceRequest);
         if (serviceRequest.getStatus().equals(ServiceRequest.Status.FINISHED)) {
             serviceRequest.setEndDate(LocalDate.now());
         }

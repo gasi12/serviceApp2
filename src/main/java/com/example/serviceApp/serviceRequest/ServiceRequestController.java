@@ -1,13 +1,12 @@
 package com.example.serviceApp.serviceRequest;
 
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDtoMapper;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController

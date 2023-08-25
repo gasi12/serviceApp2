@@ -1,4 +1,4 @@
-package com.example.serviceApp.security.auth;
+package com.example.serviceApp.security.auth.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PasswordChangeRequest {
-    private String email;
+    private String login;
     private String oldPassword;
     private String newPassword;
 }

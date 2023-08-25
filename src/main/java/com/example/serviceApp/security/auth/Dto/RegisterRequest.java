@@ -1,4 +1,4 @@
-package com.example.serviceApp.security.auth;
+package com.example.serviceApp.security.auth.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
