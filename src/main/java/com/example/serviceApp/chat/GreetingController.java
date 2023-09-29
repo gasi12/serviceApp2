@@ -15,7 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @CrossOrigin
 public class GreetingController {
-    @Autowired
+
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final ChatMessageRepository chatMessageRepository;
     @MessageMapping("/hello/{id}")//todo po co testowac skoro wydaje ci sie ze powinno dzialac
@@ -31,7 +31,7 @@ public class GreetingController {
         chatMessage.setServiceId(id);
         chatMessage.setAuthor(userName);
         chatMessage.setContent(message.getContent());
-        chatMessage.setTimestamp(LocalDateTime.now());
+        chatMessage.setTimestamp(LocalDateTime.now());//todo wpakowac to w konstruktor
         chatMessageRepository.save(chatMessage);
         simpMessagingTemplate.convertAndSend("/topic/greetings/" + id,chatMessage );
     }

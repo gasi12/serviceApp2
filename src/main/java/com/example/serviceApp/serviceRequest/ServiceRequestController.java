@@ -28,7 +28,7 @@ public class ServiceRequestController {
 
     @PutMapping("/service/addtouser/{id}")
     public ServiceRequestDto addServiceToUser(@PathVariable Long id, @RequestBody ServiceRequestDto requestDto) {
-        return ServiceRequestDtoMapper.mapToServiceRequestDto(serviceRequestService.addServiceToUser(id, requestDto));
+        return ServiceRequestDtoMapper.mapToServiceRequestDto(serviceRequestService.addServiceRequestToUser(id, requestDto));
     }
 
     @DeleteMapping("/service/{id}")

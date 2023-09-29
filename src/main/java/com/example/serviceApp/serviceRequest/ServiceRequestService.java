@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -50,7 +51,7 @@ public class ServiceRequestService {
         }
     }
     @Transactional
-    public ServiceRequest addServiceToUser(Long id, ServiceRequestDto requestDto) {
+    public ServiceRequest addServiceRequestToUser(Long id, ServiceRequestDto requestDto) {
         ServiceRequest newService = modelMapper.map(requestDto,ServiceRequest.class);
 
         Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() ->
@@ -68,15 +69,14 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
     if (pageNo < 0 || pageSize <= 0) {
         throw new IllegalArgumentException("Invalid page number or size");
     }
-    List<ServiceRequestWithUserNameDto> serviceRequestDtos = new ArrayList<>();
+
     Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
     Page<ServiceRequest> page = serviceRequestRepository.findAll(pageable);
 
     List<ServiceRequest> serviceRequests = page.getContent();
-    for (ServiceRequest s : serviceRequests) {
-        serviceRequestDtos.add(modelMapper.map(s, ServiceRequestWithUserNameDto.class));
-    }
-    return serviceRequestDtos;
+    return serviceRequests.stream()
+            .map(s -> modelMapper.map(s, ServiceRequestWithUserNameDto.class))
+            .collect(Collectors.toList());
 }
 
 
@@ -94,15 +94,14 @@ public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(in
 
     @Transactional
     public ServiceRequest updateServiceRequest(Long id, ServiceRequestDto serviceRequestDto) {
-
         ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Service request with id "+id+" not found"));
-serviceRequest.setDescription(serviceRequestDto.getDescription());
-serviceRequest.setStatus(serviceRequestDto.getStatus());
-serviceRequest.setPrice(serviceRequestDto.getPrice());//todo mapper mi nie dziala wiec na sztywniaka zrobione
-  return  serviceRequestRepository.save(serviceRequest);
+                .orElseThrow(() -> new RuntimeException("Service request with id "+id+" not found"));
 
+        modelMapper.map(serviceRequestDto, serviceRequest);
+
+        return serviceRequestRepository.save(serviceRequest);
     }
+
 
 
     @Transactional

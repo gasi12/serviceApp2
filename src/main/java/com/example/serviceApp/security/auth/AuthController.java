@@ -35,27 +35,23 @@ public class AuthController {
 
     @PostMapping("/authenticate/customer")
     public ResponseEntity authenticateCustomer(@RequestBody CustomerAuthenticationRequest request){
+        log.info("przed resoponse");
         AuthenticationResponse response = authService.authenticateCustomer(request);
         log.info("Logged user:" +SecurityContextHolder.getContext().getAuthentication().getName());
         if (response == null) {
             return ResponseEntity.badRequest().body("Password expired"); //todo na razie zadrutowane tak zeby dostac odpowiedz zamiast 403
         }
+        log.info("response:\n");
         return ResponseEntity.ok(response);
     }
     @PostMapping("/password/user")
     public User changeUserPassword(@RequestBody PasswordChangeRequest request){
-//        if(authService.changePassword(request)){
-//            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-//        }
-//        return new ResponseEntity<Error>(HttpStatus.BAD_REQUEST);
+
         return authService.changeUserPassword(request);
     }
     @PostMapping("/password/customer")
     public Customer changeCustomerPassword(@RequestBody PasswordChangeRequest request){
-//        if(authService.changePassword(request)){
-//            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
-//        }
-//        return new ResponseEntity<Error>(HttpStatus.BAD_REQUEST);
+
         return authService.changeCustomerPassword(request);
     }
     @PostMapping("/refresh")
