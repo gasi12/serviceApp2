@@ -15,7 +15,7 @@ import java.util.*;
 @Slf4j
 public class TicketHandshakeInterceptor implements HandshakeInterceptor {
 
-    private static HashMap<String,String> tickets = new HashMap<>();
+    private static final HashMap<String,String> tickets = new HashMap<>();
 
 
     public static String generateAndStoreTicket() {

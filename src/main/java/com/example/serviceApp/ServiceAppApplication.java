@@ -17,23 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class ServiceAppApplication {
 
-//	@Bean
-//	public ModelMapper modelMapper() {
-//		return new ModelMapper();
-//
-//	}
-@Bean
-public ObjectMapper objectMapper() {
-	ObjectMapper objectMapper = new ObjectMapper();
-	objectMapper.registerModule(new JavaTimeModule());
-//	objectMapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-	return objectMapper;
-}
-//	@Bean
-//	public ModelResolver modelResolver(ObjectMapper objectMapper) {
-//
-//		return new ModelResolver(objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE));
-//	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(ServiceAppApplication.class, args);
 	}

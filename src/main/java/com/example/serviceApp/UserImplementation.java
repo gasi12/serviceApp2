@@ -31,10 +31,10 @@ public abstract class UserImplementation implements UserDetails {
     private Integer id;
     private String firstName;
     private String lastName;
-    private String password;//todo dziedziczenie hasla
+    private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private Boolean passwordChangeRequired;
+    private Boolean passwordChangeRequired = true;
 
     public UserImplementation(String firstname, String lastname, String password, Role role) {
         this.firstName = firstname;
