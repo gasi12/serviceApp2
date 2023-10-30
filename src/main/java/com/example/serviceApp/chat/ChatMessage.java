@@ -21,5 +21,6 @@ public class ChatMessage {
     private String author;
     private Long serviceId;
     private LocalDateTime timestamp;
+    private String recipient;
 
 }
