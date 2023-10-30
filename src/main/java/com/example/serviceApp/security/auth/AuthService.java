@@ -1,7 +1,7 @@
 package com.example.serviceApp.security.auth;
 
+import com.example.serviceApp.UserImplementation;
 import com.example.serviceApp.customer.Customer;
-import com.example.serviceApp.customer.CustomerDetailsService;
 import com.example.serviceApp.customer.Dto.CustomerAuthenticationRequest;
 import com.example.serviceApp.customer.CustomerRepository;
 import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
@@ -24,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.function.Function;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ private final CustomerRepository customerRepository;
 private final PasswordEncoder passwordEncoder;
 private final JwtService jwtService;
 private final AuthenticationManager authenticationManager;
-private final CustomerDetailsService CustomerDetailsService;
+
     public AuthenticationResponse register(RegisterRequest request) {
         Optional<User> exist = UserRepository.findByEmail(request.getEmail());
         if (exist.isPresent()){
@@ -54,18 +56,18 @@ private final CustomerDetailsService CustomerDetailsService;
 
 
     public AuthenticationResponse authenticateUser(AuthenticationRequest request) {
-        log.info("email: " +request.getEmail()+", password: "+request.getPassword());
+        log.info("email: " +request.getUsername()+", password: "+request.getPassword());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        log.info("email: " +request.getEmail()+", password: "+request.getPassword());
-        User user = UserRepository.findByEmail(request.getEmail()).orElseThrow(()-> new IllegalArgumentException("user not found"));
+        log.info("email: " +request.getUsername()+", password: "+request.getPassword());
+        User user = UserRepository.findByEmail(request.getUsername()).orElseThrow(()-> new IllegalArgumentException("user not found"));
 
         if(user.isPasswordChangeRequired()){
-            log.info("PASSWORD  CHANGE REQUERIEDF");
+            log.info("PASSWORD  CHANGE REQUERIED");
             throw new PasswordChangeRequiredException ("password change required");
         }
         String jwtToken = jwtService.generateToken(user,"user");
@@ -74,31 +76,56 @@ private final CustomerDetailsService CustomerDetailsService;
         return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).build();
     }
 
-    public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request) {
-        log.info("Phone Number: " + request.getPhoneNumber());
+//    public AuthenticationResponse authenticateCustomer(CustomerAuthenticationRequest request) {
+//        log.info("Phone Number: " + request.getPhoneNumber());
+//
+//        Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber())
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber()));
+//
+//        try {
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(
+//                            request.getPhoneNumber(),
+//                            request.getPassword()
+//                    )
+//            );
+//        } catch (AuthenticationException e) {
+//            throw new BadCredentialsException("Invalid phone number or password");
+//        }
+//
+//        var jwtToken = jwtService.generateToken(customer, "customer");
+//        var refreshToken = jwtService.generateRefreshToken(customer);
+//
+//        return AuthenticationResponse.builder()
+//                .token(jwtToken)
+//                .refreshToken(refreshToken)
+//                .build();
+//    }
+public AuthenticationResponse authenticate(AuthenticationRequest request, Function<String, Optional<? extends UserImplementation>> finder) {
+    log.info("Username: " + request.getUsername());
 
-        Customer customer = customerRepository.findByPhoneNumber(request.getPhoneNumber())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with phone number: " + request.getPhoneNumber()));
+    UserImplementation entity = finder.apply(request.getUsername())
+            .orElseThrow(() -> new UsernameNotFoundException("Entity not found with username: " + request.getUsername()));
 
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getPhoneNumber(),
-                            request.getPassword()
-                    )
-            );
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid phone number or password");
-        }
-
-        var jwtToken = jwtService.generateToken(customer, "customer");
-        var refreshToken = jwtService.generateRefreshToken(customer);
-
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+    try {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
+    } catch (AuthenticationException e) {
+        throw new BadCredentialsException("Invalid username or password");
     }
+
+    var jwtToken = jwtService.generateToken(entity,entity.getClass().getSimpleName());
+    var refreshToken = jwtService.generateRefreshToken(entity);
+
+    return AuthenticationResponse.builder()
+            .token(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
+}
     public ResponseEntity refreshAuthentication( TokenRequest request){
         String refreshToken = request.getToken();
         UserDetails userDetails = jwtService.getUserDetails(refreshToken);

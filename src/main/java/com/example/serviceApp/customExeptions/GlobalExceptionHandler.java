@@ -56,6 +56,15 @@ public class GlobalExceptionHandler {
         errorMessage.setMessage(e.getMessage());
         return errorMessage;
     }
+    @ExceptionHandler(BadStatusException.class)
+    @ResponseBody
+    public ErrorMessage handleBadStatusException(BadStatusException e) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setStatus(HttpStatus.NOT_FOUND.value());
+        errorMessage.setError("Wrong status");
+        errorMessage.setMessage(e.getMessage());
+        return errorMessage;
+    }
 
     @Data
     @AllArgsConstructor

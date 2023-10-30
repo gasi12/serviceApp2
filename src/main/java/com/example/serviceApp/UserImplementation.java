@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,13 +25,13 @@ public abstract class UserImplementation implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String firstName;
     private String lastName;
     private String password;
     @Enumerated(EnumType.STRING)
-    private Role role;
-    private Boolean passwordChangeRequired = true;
+    private Role role = Role.CUSTOMER;
+    private Boolean passwordChangeRequired = false;//todo pamietac to na koncu dac na true
 
     public UserImplementation(String firstname, String lastname, String password, Role role) {
         this.firstName = firstname;
