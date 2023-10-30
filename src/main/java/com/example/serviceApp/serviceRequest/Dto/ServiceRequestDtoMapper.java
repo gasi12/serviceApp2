@@ -20,6 +20,7 @@ public class ServiceRequestDtoMapper {
                 .id(request.getId())
                 .price(request.getPrice())
                 .endDate(request.getEndDate())
+                .userId(request.getUser().getId())
                 .build();
     }
 }

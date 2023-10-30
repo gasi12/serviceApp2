@@ -24,4 +24,5 @@ public class ServiceRequestDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate endDate;
     private Long price;
+    private Long userId;
 }
