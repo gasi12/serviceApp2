@@ -1,13 +1,12 @@
 package com.example.serviceApp.security.auth;
 
 import com.example.serviceApp.UserImplementation;
-import com.example.serviceApp.customer.Customer;
-import com.example.serviceApp.customer.Dto.CustomerAuthenticationRequest;
-import com.example.serviceApp.customer.CustomerRepository;
 import com.example.serviceApp.customExeptions.PasswordChangeRequiredException;
+import com.example.serviceApp.customer.Customer;
+import com.example.serviceApp.customer.CustomerRepository;
+import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
-import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.security.auth.Dto.*;
 import com.example.serviceApp.security.config.JwtService;
 import lombok.RequiredArgsConstructor;

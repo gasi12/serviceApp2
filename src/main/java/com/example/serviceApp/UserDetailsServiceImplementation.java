@@ -1,7 +1,5 @@
 package com.example.serviceApp;
 
-import com.example.serviceApp.customer.CustomerUserDetailsService;
-import com.example.serviceApp.security.User.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

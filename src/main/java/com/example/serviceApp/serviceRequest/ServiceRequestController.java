@@ -1,13 +1,12 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithDetailsDto;
 import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
 import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDtoMapper;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithDetailsDto;
 import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServiceRequestController {
 
     private final ServiceRequestService serviceRequestService;
-    private final ModelMapper modelMapper;
     private final ConcurrentHashMap<Long, List<String>> userOrdersCache = new ConcurrentHashMap<>();
 
     @GetMapping("/cache")

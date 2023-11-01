@@ -1,7 +1,6 @@
 package com.example.serviceApp.customer.Dto;
 
 import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
-import com.example.serviceApp.serviceRequest.ServiceRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

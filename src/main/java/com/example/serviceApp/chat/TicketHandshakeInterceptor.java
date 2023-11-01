@@ -1,18 +1,14 @@
 package com.example.serviceApp.chat;
 
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
-import java.util.*;
+import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class TicketHandshakeInterceptor implements HandshakeInterceptor {

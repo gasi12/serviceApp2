@@ -1,8 +1,6 @@
 package com.example.serviceApp.security.config;
 
-import ch.qos.logback.classic.encoder.JsonEncoder;
 import com.example.serviceApp.UserDetailsServiceImplementation;
-import com.example.serviceApp.security.User.CustomUserDetailsService;
 import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
@@ -14,16 +12,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-private final UserRepository userRepository;
-private final CustomUserDetailsService customUserDetailsService;
+
 private final UserDetailsServiceImplementation userDetailsServiceImplementation;
 
     @Bean

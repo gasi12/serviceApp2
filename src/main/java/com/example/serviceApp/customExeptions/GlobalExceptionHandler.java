@@ -1,6 +1,5 @@
 package com.example.serviceApp.customExeptions;
 
-import com.example.serviceApp.customExeptions.NoContentException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

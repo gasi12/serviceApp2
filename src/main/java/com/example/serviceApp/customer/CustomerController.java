@@ -1,16 +1,18 @@
 package com.example.serviceApp.customer;
 
-import com.example.serviceApp.customer.Dto.CustomerDtoWithTempPassword;
 import com.example.serviceApp.chat.ChatTicket;
 import com.example.serviceApp.chat.TicketService;
 import com.example.serviceApp.customer.Dto.CustomerDto;
+import com.example.serviceApp.customer.Dto.CustomerDtoWithTempPassword;
 import com.example.serviceApp.customer.Dto.CustomerWithRequestsDto;
+import com.google.common.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -19,7 +21,12 @@ public class CustomerController {
 
     private final CustomerService customerService;
     private final ModelMapper modelMapper;
+    private final Cache<Long, List<String>> userCache;
 
+    @GetMapping("/cache")//todo testowe
+    public Map<Long, List<String>> getCache(){
+        return  userCache.asMap();
+    }
     @GetMapping("/generateticket")//todo postawic to w jakis madrzejszy controller, tu dziala ale jest burdel ale sam kontroelr działajet
         public ChatTicket generateTicket() {
         return new ChatTicket(TicketService.generateAndStoreTicket());

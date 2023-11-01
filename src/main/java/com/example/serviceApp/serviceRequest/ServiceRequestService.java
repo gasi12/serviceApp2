@@ -1,14 +1,13 @@
 package com.example.serviceApp.serviceRequest;
 
 import com.example.serviceApp.customExeptions.BadStatusException;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithDetailsDto;
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerRepository;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithDetailsDto;
 import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -35,19 +35,13 @@ public class ServiceRequestService {
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
-    private final ObjectMapper objectMapper;
-    //private final ConcurrentHashMap<String, HashMap<Long, String>> userOrdersCache;
 
     public List<ServiceRequestDto> getServiceRequests() {
 
         return serviceRequestRepository.findAll().stream().map((s) -> modelMapper.map(s, ServiceRequestDto.class)).toList();
     }
 
-public boolean isOwner(Long serviceRequestId,String customerName){
-    ServiceRequest s= serviceRequestRepository.findById(serviceRequestId).orElseThrow();
-   return s.getCustomer().getUsername().equals(customerName);
 
-}
     public void deleteById(Long id) {
         boolean exist = serviceRequestRepository.existsById(id);
         if (exist) {
@@ -79,19 +73,7 @@ public boolean isOwner(Long serviceRequestId,String customerName){
     }
 
 
-public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName(int pageNo, int pageSize) {
-    if (pageNo < 0 || pageSize <= 0) {
-        throw new IllegalArgumentException("Invalid page number or size");
-    }
 
-    Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("id").descending());
-    Page<ServiceRequest> page = serviceRequestRepository.findAll(pageable);
-
-    List<ServiceRequest> serviceRequests = page.getContent();
-    return serviceRequests.stream()
-            .map(s -> modelMapper.map(s, ServiceRequestWithUserNameDto.class))
-            .collect(Collectors.toList());
-}
     public List<ServiceRequestWithDetailsDto> findAllServiceRequestsWithUserName2(int pageNo, int pageSize) {
         if (pageNo < 0 || pageSize <= 0) {
             throw new IllegalArgumentException("Invalid page number or size");
