@@ -2,24 +2,22 @@ package com.example.serviceApp.customer;
 
 import com.example.serviceApp.customer.Dto.CustomerDto;
 import com.example.serviceApp.customer.Dto.CustomerWithRequestsDto;
-import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
-
+import com.google.common.cache.Cache;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -30,7 +28,8 @@ import java.util.concurrent.ConcurrentHashMap;
         private final UserRepository userRepository;
         private final ModelMapper modelMapper;
         private final PasswordEncoder passwordEncoder;
-        private final ConcurrentHashMap<Long, List<String>> userOrdersCache;
+
+        private final Cache<Long, List<String>> userCache;
         public CustomerWithRequestsDto findCustomerById(Long id){
 
         return modelMapper.map(customerRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("user with id " + id +" not found")),CustomerWithRequestsDto.class);
@@ -53,66 +52,17 @@ import java.util.concurrent.ConcurrentHashMap;
                         new IllegalArgumentException("user with number "+ phoneNumber + "does not exist")),
                 CustomerWithRequestsDto.class);
     }
-    @Transactional//todo user sieje ferment
-    public Customer createCustomer(Customer customer) {
-        Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
-        List<ServiceRequest> serviceRequestList = customer.getServiceRequestList();
-
-        Customer handledCustomer;
-        String password = null;
-
-        if (existingCustomer.isPresent()) {
-            handledCustomer = existingCustomer.get();
-        } else {
-            password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
-            customer.setPassword(passwordEncoder.encode(password));
-            handledCustomer = customer;
-        }
-
-        handledCustomer.setFirstName(customer.getFirstName());
-        handledCustomer.setServiceRequestList(serviceRequestList);
-        handledCustomer.setRole(Role.CUSTOMER);
-
-       User u= userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()->new IllegalArgumentException());
-        u = userRepository.saveAndFlush(u);
-        for (ServiceRequest s : serviceRequestList) {
-            s.setCustomer(handledCustomer);
-            s.setStatus(ServiceRequest.Status.PENDING);
-            s.setUser(u);
-
-        }
-
-
-        Customer savedCustomer = customerRepository.save(handledCustomer);
-
-        if(password != null) {
-            savedCustomer.setPlainPassword(password);
-        }
-        for (ServiceRequest s : savedCustomer.getServiceRequestList()) {
-            List<String> values =userOrdersCache.computeIfAbsent(s.getId(), k -> new ArrayList<>());
-            if (!values.contains(s.getCustomer().getUsername())) {
-                values.add(s.getCustomer().getUsername());
-            }
-//            if (!values.contains(u.getUsername())) {
-//                values.add(u.getUsername());
-//            }
-            log.info(s.getId().toString());
-
-        }
-
-        return savedCustomer;
-    }
 public Customer createCustomer2(Customer customer){
     Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
     User u= userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()->new IllegalArgumentException());
     Customer handledCustomer;
-    String password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
+
 
     if(existingCustomer.isPresent()){
         handledCustomer=existingCustomer.get();
     }
     else{
-
+        String password = RandomStringUtils.randomAlphanumeric(6).toUpperCase();
         handledCustomer=customer;
         customer.setPlainPassword(password);
         customer.setPassword(passwordEncoder.encode(password));
@@ -123,8 +73,11 @@ public Customer createCustomer2(Customer customer){
         s.setCustomer(handledCustomer);
     }
     handledCustomer.setServiceRequestList(customer.getServiceRequestList());
-
-          return   customerRepository.save(handledCustomer);
+          Customer savedCustomer= customerRepository.save(handledCustomer);
+          for(ServiceRequest s: savedCustomer.getServiceRequestList()){
+              userCache.put(s.getId(), List.of(s.getCustomer().getUsername(),s.getUser().getUsername()));
+          }
+          return savedCustomer;
 
 }
     @Transactional
