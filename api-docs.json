@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "x-stoplight": {
-    "id": "s92uqcoy900v0"
+    "id": "jkrt5i940w36e"
   },
   "info": {
     "title": "OpenAPI definition",
@@ -9,2061 +9,11 @@
   },
   "servers": [
     {
-      "url": "http://localhost:8080",
+      "url": "http://127.0.0.1:8080",
       "description": "Generated server url"
     }
   ],
   "paths": {
-    "/chatMessages": {
-      "get": {
-        "tags": [
-          "chat-message-entity-controller"
-        ],
-        "description": "get-chatmessage",
-        "operationId": "getCollectionResource-chatmessage-get_1",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Zero-based page index (0..N)",
-            "required": false,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "The size of the page to be returned",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "default": 20
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelChatMessage"
-                }
-              },
-              "application/x-spring-data-compact+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelChatMessage"
-                }
-              },
-              "text/uri-list": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "u9wofis7cuu7r"
-        }
-      },
-      "post": {
-        "tags": [
-          "chat-message-entity-controller"
-        ],
-        "description": "create-chatmessage",
-        "operationId": "postCollectionResource-chatmessage-post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatMessageRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "bpjzfmujg7b9v"
-        }
-      }
-    },
-    "/chatMessages/search/findByServiceId": {
-      "get": {
-        "tags": [
-          "chat-message-search-controller"
-        ],
-        "operationId": "executeSearch-chatmessage-get",
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelEntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "sna433mxa67iy"
-        }
-      }
-    },
-    "/chatMessages/{id}": {
-      "get": {
-        "tags": [
-          "chat-message-entity-controller"
-        ],
-        "description": "get-chatmessage",
-        "operationId": "getItemResource-chatmessage-get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "rx20bock2a7gh"
-        }
-      },
-      "put": {
-        "tags": [
-          "chat-message-entity-controller"
-        ],
-        "description": "update-chatmessage",
-        "operationId": "putItemResource-chatmessage-put",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatMessageRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "cz84vdc6jesyc"
-        }
-      },
-      "delete": {
-        "tags": [
-          "chat-message-entity-controller"
-        ],
-        "description": "delete-chatmessage",
-        "operationId": "deleteItemResource-chatmessage-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "rag49qqiqibhj"
-        }
-      },
-      "patch": {
-        "tags": [
-          "chat-message-entity-controller"
-        ],
-        "description": "patch-chatmessage",
-        "operationId": "patchItemResource-chatmessage-patch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ChatMessageRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "ayql2spkrvi9k"
-        }
-      }
-    },
-    "/customers": {
-      "get": {
-        "tags": [
-          "customer-entity-controller"
-        ],
-        "description": "get-customer",
-        "operationId": "getCollectionResource-customer-get_1",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Zero-based page index (0..N)",
-            "required": false,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "The size of the page to be returned",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "default": 20
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelCustomer"
-                }
-              },
-              "application/x-spring-data-compact+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelCustomer"
-                }
-              },
-              "text/uri-list": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "115gxwehw1a0g"
-        }
-      },
-      "post": {
-        "tags": [
-          "customer-entity-controller"
-        ],
-        "description": "create-customer",
-        "operationId": "postCollectionResource-customer-post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomerRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "8swe1yd3qgzrn"
-        }
-      }
-    },
-    "/customers/search/existsByPhoneNumber": {
-      "get": {
-        "tags": [
-          "customer-search-controller"
-        ],
-        "operationId": "executeSearch-customer-get",
-        "parameters": [
-          {
-            "name": "phoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "type": "boolean"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "x0n34afzonmsn"
-        }
-      }
-    },
-    "/customers/search/findByPhoneNumber": {
-      "get": {
-        "tags": [
-          "customer-search-controller"
-        ],
-        "operationId": "executeSearch-customer-get_1",
-        "parameters": [
-          {
-            "name": "phoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "i8z3h6dnvacvm"
-        }
-      }
-    },
-    "/customers/search/getCustomerById": {
-      "get": {
-        "tags": [
-          "customer-search-controller"
-        ],
-        "operationId": "executeSearch-customer-get_2",
-        "parameters": [
-          {
-            "name": "phoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "x36i9hwdhgoui"
-        }
-      }
-    },
-    "/customers/search/getCustomerByPhoneNumber": {
-      "get": {
-        "tags": [
-          "customer-search-controller"
-        ],
-        "operationId": "executeSearch-customer-get_3",
-        "parameters": [
-          {
-            "name": "phoneNumber",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "m3c23o1kkqs47"
-        }
-      }
-    },
-    "/customers/search/getUserById": {
-      "get": {
-        "tags": [
-          "customer-search-controller"
-        ],
-        "operationId": "executeSearch-customer-get_4",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "1jwxcsd25lji6"
-        }
-      }
-    },
-    "/customers/{id}": {
-      "get": {
-        "tags": [
-          "customer-entity-controller"
-        ],
-        "description": "get-customer",
-        "operationId": "getItemResource-customer-get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "woyor3unmh36k"
-        }
-      },
-      "put": {
-        "tags": [
-          "customer-entity-controller"
-        ],
-        "description": "update-customer",
-        "operationId": "putItemResource-customer-put",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomerRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "h2calec5ssn60"
-        }
-      },
-      "delete": {
-        "tags": [
-          "customer-entity-controller"
-        ],
-        "description": "delete-customer",
-        "operationId": "deleteItemResource-customer-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "j0hfn5ro7vc8b"
-        }
-      },
-      "patch": {
-        "tags": [
-          "customer-entity-controller"
-        ],
-        "description": "patch-customer",
-        "operationId": "patchItemResource-customer-patch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CustomerRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "q53rudjdzpfyf"
-        }
-      }
-    },
-    "/customers/{id}/serviceRequestList": {
-      "get": {
-        "tags": [
-          "customer-property-reference-controller"
-        ],
-        "description": "get-servicerequest-by-customer-Id",
-        "operationId": "followPropertyReference-customer-get_1",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelServiceRequest"
-                }
-              },
-              "text/uri-list": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "5r5swm9wc13ps"
-        }
-      },
-      "put": {
-        "tags": [
-          "customer-property-reference-controller"
-        ],
-        "description": "update-servicerequest-by-customer-Id",
-        "operationId": "createPropertyReference-customer-put",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "application/x-spring-data-compact+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "text/uri-list": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelServiceRequest"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelServiceRequest"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "fi11rt636hrlk"
-        }
-      },
-      "delete": {
-        "tags": [
-          "customer-property-reference-controller"
-        ],
-        "description": "delete-servicerequest-by-customer-Id",
-        "operationId": "deletePropertyReference-customer-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "zpyjbnxrhmrni"
-        }
-      },
-      "patch": {
-        "tags": [
-          "customer-property-reference-controller"
-        ],
-        "description": "patch-servicerequest-by-customer-Id",
-        "operationId": "createPropertyReference-customer-patch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "application/x-spring-data-compact+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "text/uri-list": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelServiceRequest"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "ec92j0jy4ti15"
-        }
-      }
-    },
-    "/customers/{id}/serviceRequestList/{propertyId}": {
-      "get": {
-        "tags": [
-          "customer-property-reference-controller"
-        ],
-        "description": "get-servicerequest-by-customer-Id",
-        "operationId": "followPropertyReference-customer-get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "propertyId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelServiceRequest"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "yngt6jv07sgqr"
-        }
-      },
-      "delete": {
-        "tags": [
-          "customer-property-reference-controller"
-        ],
-        "description": "delete-servicerequest-by-customer-Id",
-        "operationId": "deletePropertyReferenceId-customer-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "propertyId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "kilps5ya3bnmr"
-        }
-      }
-    },
-    "/profile": {
-      "get": {
-        "tags": [
-          "profile-controller"
-        ],
-        "operationId": "listAllFormsOfMetadata_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RepresentationModelObject"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "01ye9b0cvdaew"
-        }
-      }
-    },
-    "/profile/chatMessages": {
-      "get": {
-        "tags": [
-          "profile-controller"
-        ],
-        "operationId": "descriptor_1_1_1",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/alps+json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/schema+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonSchema"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "cl0oipdt3m0do"
-        }
-      }
-    },
-    "/profile/customers": {
-      "get": {
-        "tags": [
-          "profile-controller"
-        ],
-        "operationId": "descriptor_1_1_2",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/alps+json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/schema+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonSchema"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "i0x1hwh075w7c"
-        }
-      }
-    },
-    "/profile/serviceRequests": {
-      "get": {
-        "tags": [
-          "profile-controller"
-        ],
-        "operationId": "descriptor_1_1_3",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/alps+json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/schema+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonSchema"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "o3b469u6kxohj"
-        }
-      }
-    },
-    "/profile/users": {
-      "get": {
-        "tags": [
-          "profile-controller"
-        ],
-        "operationId": "descriptor_1_1_4",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/alps+json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/schema+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JsonSchema"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "nyncq04caq6q3"
-        }
-      }
-    },
-    "/serviceRequests": {
-      "get": {
-        "tags": [
-          "service-request-entity-controller"
-        ],
-        "description": "get-servicerequest",
-        "operationId": "getCollectionResource-servicerequest-get_1",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Zero-based page index (0..N)",
-            "required": false,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "The size of the page to be returned",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "default": 20
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelServiceRequest"
-                }
-              },
-              "application/x-spring-data-compact+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelServiceRequest"
-                }
-              },
-              "text/uri-list": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "p54q249az0my9"
-        }
-      },
-      "post": {
-        "tags": [
-          "service-request-entity-controller"
-        ],
-        "description": "create-servicerequest",
-        "operationId": "postCollectionResource-servicerequest-post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ServiceRequestRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "wcq5xriz7t912"
-        }
-      }
-    },
-    "/serviceRequests/search/findAllByStatus": {
-      "get": {
-        "tags": [
-          "service-request-search-controller"
-        ],
-        "operationId": "executeSearch-servicerequest-get",
-        "parameters": [
-          {
-            "name": "status",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "PENDING",
-                "IN_PROCESS",
-                "ON_HOLD",
-                "FINISHED"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CollectionModelEntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "9d2ythgzzz368"
-        }
-      }
-    },
-    "/serviceRequests/{id}": {
-      "get": {
-        "tags": [
-          "service-request-entity-controller"
-        ],
-        "description": "get-servicerequest",
-        "operationId": "getItemResource-servicerequest-get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "g6yzlihqfa4pd"
-        }
-      },
-      "put": {
-        "tags": [
-          "service-request-entity-controller"
-        ],
-        "description": "update-servicerequest",
-        "operationId": "putItemResource-servicerequest-put",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ServiceRequestRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "vbya9ip30q10c"
-        }
-      },
-      "delete": {
-        "tags": [
-          "service-request-entity-controller"
-        ],
-        "description": "delete-servicerequest",
-        "operationId": "deleteItemResource-servicerequest-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "4li0drykai2st"
-        }
-      },
-      "patch": {
-        "tags": [
-          "service-request-entity-controller"
-        ],
-        "description": "patch-servicerequest",
-        "operationId": "patchItemResource-servicerequest-patch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ServiceRequestRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "4n4x36flfn3qg"
-        }
-      }
-    },
-    "/serviceRequests/{id}/customer": {
-      "get": {
-        "tags": [
-          "service-request-property-reference-controller"
-        ],
-        "description": "get-customer-by-servicerequest-Id",
-        "operationId": "followPropertyReference-servicerequest-get_1",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              },
-              "text/uri-list": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "x4q1l6uj2c5t4"
-        }
-      },
-      "put": {
-        "tags": [
-          "service-request-property-reference-controller"
-        ],
-        "description": "update-customer-by-servicerequest-Id",
-        "operationId": "createPropertyReference-servicerequest-put",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "application/x-spring-data-compact+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "text/uri-list": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "eq86uqz0w7er0"
-        }
-      },
-      "delete": {
-        "tags": [
-          "service-request-property-reference-controller"
-        ],
-        "description": "delete-customer-by-servicerequest-Id",
-        "operationId": "deletePropertyReference-servicerequest-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "eudhkby34zmdn"
-        }
-      },
-      "patch": {
-        "tags": [
-          "service-request-property-reference-controller"
-        ],
-        "description": "patch-customer-by-servicerequest-Id",
-        "operationId": "createPropertyReference-servicerequest-patch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "application/x-spring-data-compact+json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollectionModelObject"
-              }
-            },
-            "text/uri-list": {
-              "schema": {
-                "type": "string"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "alrk5j1zwrsqn"
-        }
-      }
-    },
-    "/serviceRequests/{id}/customer/{propertyId}": {
-      "get": {
-        "tags": [
-          "service-request-property-reference-controller"
-        ],
-        "description": "get-customer-by-servicerequest-Id",
-        "operationId": "followPropertyReference-servicerequest-get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "propertyId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "bz6realxm2gpq"
-        }
-      },
-      "delete": {
-        "tags": [
-          "service-request-property-reference-controller"
-        ],
-        "description": "delete-customer-by-servicerequest-Id",
-        "operationId": "deletePropertyReferenceId-servicerequest-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "propertyId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "ikrbxjokqf4h2"
-        }
-      }
-    },
-    "/users": {
-      "get": {
-        "tags": [
-          "user-entity-controller"
-        ],
-        "description": "get-user",
-        "operationId": "getCollectionResource-user-get_1",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Zero-based page index (0..N)",
-            "required": false,
-            "schema": {
-              "minimum": 0,
-              "type": "integer",
-              "default": 0
-            }
-          },
-          {
-            "name": "size",
-            "in": "query",
-            "description": "The size of the page to be returned",
-            "required": false,
-            "schema": {
-              "minimum": 1,
-              "type": "integer",
-              "default": 20
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "description": "Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.",
-            "required": false,
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelUser"
-                }
-              },
-              "application/x-spring-data-compact+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PagedModelEntityModelUser"
-                }
-              },
-              "text/uri-list": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "jwpa3e0lmo5z8"
-        }
-      },
-      "post": {
-        "tags": [
-          "user-entity-controller"
-        ],
-        "description": "create-user",
-        "operationId": "postCollectionResource-user-post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "8uz8jgdnugh79"
-        }
-      }
-    },
-    "/users/search/findByEmail": {
-      "get": {
-        "tags": [
-          "user-search-controller"
-        ],
-        "operationId": "executeSearch-user-get",
-        "parameters": [
-          {
-            "name": "email",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "13go8p2liglan"
-        }
-      }
-    },
-    "/users/{id}": {
-      "get": {
-        "tags": [
-          "user-entity-controller"
-        ],
-        "description": "get-user",
-        "operationId": "getItemResource-user-get",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "indit7ijjzrce"
-        }
-      },
-      "put": {
-        "tags": [
-          "user-entity-controller"
-        ],
-        "description": "update-user",
-        "operationId": "putItemResource-user-put",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          },
-          "201": {
-            "description": "Created",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "1q2s0u43j7joc"
-        }
-      },
-      "delete": {
-        "tags": [
-          "user-entity-controller"
-        ],
-        "description": "delete-user",
-        "operationId": "deleteItemResource-user-delete",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "x-stoplight": {
-          "id": "48mffbcsbm9r9"
-        }
-      },
-      "patch": {
-        "tags": [
-          "user-entity-controller"
-        ],
-        "description": "patch-user",
-        "operationId": "patchItemResource-user-patch",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserRequestBody"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/hal+json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          },
-          "204": {
-            "description": "No Content"
-          }
-        },
-        "x-stoplight": {
-          "id": "l861tnjh93em7"
-        }
-      }
-    },
     "/services/service/{id}": {
       "get": {
         "tags": [
@@ -2104,7 +54,7 @@
           }
         },
         "x-stoplight": {
-          "id": "nttgaz07shx3f"
+          "id": "z3nnqevycf55f"
         }
       },
       "put": {
@@ -2127,7 +77,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ServiceRequestDto"
+                "$ref": "#/components/schemas/ServiceRequestWithCustomerEditorDto"
               }
             }
           },
@@ -2139,7 +89,7 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ServiceRequest"
+                  "$ref": "#/components/schemas/ServiceRequestDto"
                 }
               }
             }
@@ -2156,7 +106,7 @@
           }
         },
         "x-stoplight": {
-          "id": "cr7c6t0tfe31y"
+          "id": "895ov2tr07x3c"
         }
       },
       "delete": {
@@ -2191,7 +141,7 @@
           }
         },
         "x-stoplight": {
-          "id": "r9v54f0yabq5x"
+          "id": "nhbng5eiwhuji"
         }
       }
     },
@@ -2245,7 +195,7 @@
           }
         },
         "x-stoplight": {
-          "id": "8ylbc86dlfanh"
+          "id": "gnmm8wf6f3d2j"
         }
       }
     },
@@ -2299,7 +249,7 @@
           }
         },
         "x-stoplight": {
-          "id": "bth965nrkcldv"
+          "id": "xh37nlnu4ir4c"
         }
       }
     },
@@ -2343,7 +293,7 @@
           }
         },
         "x-stoplight": {
-          "id": "dxqj2icz23mil"
+          "id": "xqf9jgc9z2wlj"
         }
       },
       "put": {
@@ -2378,7 +328,7 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Customer"
+                  "$ref": "#/components/schemas/CustomerDto"
                 }
               }
             }
@@ -2395,7 +345,7 @@
           }
         },
         "x-stoplight": {
-          "id": "vf8tu650ct46n"
+          "id": "4r8zkb0gk20ly"
         }
       },
       "delete": {
@@ -2437,7 +387,7 @@
           }
         },
         "x-stoplight": {
-          "id": "zdidi7megzzd0"
+          "id": "jwho3rmgts07g"
         }
       }
     },
@@ -2463,7 +413,7 @@
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Customer"
+                  "$ref": "#/components/schemas/CustomerDtoWithTempPassword"
                 }
               }
             }
@@ -2480,11 +430,11 @@
           }
         },
         "x-stoplight": {
-          "id": "vfcp1c3zpckm6"
+          "id": "j5nlfz0quhdtm"
         }
       }
     },
-    "/auth/register": {
+    "/auth/register/user": {
       "post": {
         "tags": [
           "auth-controller"
@@ -2523,7 +473,7 @@
           }
         },
         "x-stoplight": {
-          "id": "hz7qfg1k5rum0"
+          "id": "jlz05s2x5bzpe"
         }
       }
     },
@@ -2566,7 +516,7 @@
           }
         },
         "x-stoplight": {
-          "id": "8zffpcm7cp9cx"
+          "id": "ia7qqpejj5mp1"
         }
       }
     },
@@ -2609,7 +559,7 @@
           }
         },
         "x-stoplight": {
-          "id": "bbp8e1on29r1h"
+          "id": "z6qbejeqvpctq"
         }
       }
     },
@@ -2652,7 +602,7 @@
           }
         },
         "x-stoplight": {
-          "id": "abrkcd6v82f6w"
+          "id": "78f78i5t4gg0t"
         }
       }
     },
@@ -2661,7 +611,7 @@
         "tags": [
           "auth-controller"
         ],
-        "operationId": "authenticate",
+        "operationId": "authenticateUser",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2695,7 +645,7 @@
           }
         },
         "x-stoplight": {
-          "id": "pzhjvcocqx6r9"
+          "id": "5csy8h50r2hxx"
         }
       }
     },
@@ -2709,7 +659,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CustomerAuthenticationRequest"
+                "$ref": "#/components/schemas/AuthenticationRequest"
               }
             }
           },
@@ -2738,7 +688,114 @@
           }
         },
         "x-stoplight": {
-          "id": "a4vfk1cxtawj9"
+          "id": "lyyilv8lorf8j"
+        }
+      }
+    },
+    "/services/stats/status": {
+      "get": {
+        "tags": [
+          "service-request-controller"
+        ],
+        "operationId": "getStatusNumbers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "d207iilauso1w"
+        }
+      }
+    },
+    "/services/stats/revenue": {
+      "get": {
+        "tags": [
+          "service-request-controller"
+        ],
+        "operationId": "getRevenue",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RevenuePerPeriod"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "hluefpq0mce0d"
+        }
+      }
+    },
+    "/services/stats/avgtime": {
+      "get": {
+        "tags": [
+          "service-request-controller"
+        ],
+        "operationId": "findAverageTime",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "type": "number",
+                  "format": "double"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/hal+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMessage"
+                }
+              }
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "ndocxwyy6ei9j"
         }
       }
     },
@@ -2756,7 +813,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ServiceRequest"
+                    "$ref": "#/components/schemas/ServiceRequestDto"
                   }
                 }
               }
@@ -2774,7 +831,7 @@
           }
         },
         "x-stoplight": {
-          "id": "izbqzt2e5tf4d"
+          "id": "2bogct3qzjjmu"
         }
       }
     },
@@ -2790,13 +847,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "type": "string",
-              "enum": [
-                "PENDING",
-                "IN_PROCESS",
-                "ON_HOLD",
-                "FINISHED"
-              ]
+              "type": "string"
             }
           }
         ],
@@ -2808,7 +859,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ServiceRequest"
+                    "$ref": "#/components/schemas/ServiceRequestWithDetailsDto"
                   }
                 }
               }
@@ -2826,7 +877,7 @@
           }
         },
         "x-stoplight": {
-          "id": "ysmpk8k3e6d85"
+          "id": "ko3jahsrdqff0"
         }
       }
     },
@@ -2866,7 +917,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ServiceRequestWithUserNameDto"
+                    "$ref": "#/components/schemas/ServiceRequestWithDetailsDto"
                   }
                 }
               }
@@ -2884,23 +935,23 @@
           }
         },
         "x-stoplight": {
-          "id": "arvl479fssnd0"
+          "id": "akx52hpz6akj9"
         }
       }
     },
-    "/generateticket": {
+    "/services/cache": {
       "get": {
         "tags": [
-          "customer-controller"
+          "service-request-controller"
         ],
-        "operationId": "generateTicket",
+        "operationId": "getUserOrders",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/hal+json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatTicket"
+                  "type": "string"
                 }
               }
             }
@@ -2917,7 +968,7 @@
           }
         },
         "x-stoplight": {
-          "id": "j0n6wt89gxrxc"
+          "id": "fzqr8fw6mb8sg"
         }
       }
     },
@@ -2961,7 +1012,7 @@
           }
         },
         "x-stoplight": {
-          "id": "8grz8gw56jdg8"
+          "id": "6koltif7ucq5a"
         }
       }
     },
@@ -3005,7 +1056,7 @@
           }
         },
         "x-stoplight": {
-          "id": "xdby09a3q5jtr"
+          "id": "8gxcxfmc7looq"
         }
       }
     },
@@ -3041,7 +1092,7 @@
           }
         },
         "x-stoplight": {
-          "id": "hr1zmwe5dcgkc"
+          "id": "n5839wppv4n16"
         }
       }
     }
@@ -3063,322 +1114,7 @@
           }
         },
         "x-stoplight": {
-          "id": "i36it01z6pc6h"
-        }
-      },
-      "AbstractJsonSchemaPropertyObject": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "readOnly": {
-            "type": "boolean"
-          }
-        },
-        "x-stoplight": {
-          "id": "cijzbpzm1ib55"
-        }
-      },
-      "Item": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "properties": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/AbstractJsonSchemaPropertyObject"
-            }
-          },
-          "requiredProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "x-stoplight": {
-          "id": "p3dhonoouksu5"
-        }
-      },
-      "JsonSchema": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string"
-          },
-          "properties": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/AbstractJsonSchemaPropertyObject"
-            }
-          },
-          "requiredProperties": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "definitions": {
-            "type": "object",
-            "additionalProperties": {
-              "$ref": "#/components/schemas/Item"
-            }
-          },
-          "type": {
-            "type": "string"
-          },
-          "$schema": {
-            "type": "string"
-          }
-        },
-        "x-stoplight": {
-          "id": "8m90a0jj4l94u"
-        }
-      },
-      "Links": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "#/components/schemas/Link"
-        },
-        "x-stoplight": {
-          "id": "fumkdozuxhq1v"
-        }
-      },
-      "RepresentationModelObject": {
-        "type": "object",
-        "properties": {
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "osfi4dit8kmco"
-        }
-      },
-      "EntityModelChatMessage": {
-        "type": "object",
-        "properties": {
-          "content": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
-          },
-          "serviceId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "0yrnf0pd7hstu"
-        }
-      },
-      "PageMetadata": {
-        "type": "object",
-        "properties": {
-          "size": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalElements": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "totalPages": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "number": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
-        "x-stoplight": {
-          "id": "rokqrg07b3gv1"
-        }
-      },
-      "PagedModelEntityModelChatMessage": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "chatMessages": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          },
-          "page": {
-            "$ref": "#/components/schemas/PageMetadata"
-          }
-        },
-        "x-stoplight": {
-          "id": "gqlrhhshvo8dv"
-        }
-      },
-      "CollectionModelEntityModelChatMessage": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "chatMessages": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelChatMessage"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "xksb75x7p9qen"
-        }
-      },
-      "EntityModelUser": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "USER",
-              "CUSTOMER",
-              "ADMIN"
-            ]
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
-          },
-          "email": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "credentialsNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "ntmsk99729egk"
-        }
-      },
-      "PagedModelEntityModelUser": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "users": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelUser"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          },
-          "page": {
-            "$ref": "#/components/schemas/PageMetadata"
-          }
-        },
-        "x-stoplight": {
-          "id": "15l2rim5h4nmk"
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "USER",
-              "CUSTOMER",
-              "ADMIN"
-            ]
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
-          },
-          "email": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "credentialsNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
-          }
-        },
-        "x-stoplight": {
-          "id": "z6uor7707sp15"
+          "id": "50e78nsz2fv3f"
         }
       },
       "Customer": {
@@ -3386,7 +1122,7 @@
         "properties": {
           "id": {
             "type": "integer",
-            "format": "int32"
+            "format": "int64"
           },
           "firstName": {
             "type": "string"
@@ -3438,85 +1174,7 @@
           }
         },
         "x-stoplight": {
-          "id": "4qpdc8282q2ck"
-        }
-      },
-      "EntityModelCustomer": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "USER",
-              "CUSTOMER",
-              "ADMIN"
-            ]
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
-          },
-          "phoneNumber": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "plainPassword": {
-            "type": "string"
-          },
-          "username": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "credentialsNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "ysfyujhyldbtf"
-        }
-      },
-      "PagedModelEntityModelCustomer": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "customers": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelCustomer"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          },
-          "page": {
-            "$ref": "#/components/schemas/PageMetadata"
-          }
-        },
-        "x-stoplight": {
-          "id": "7ru5mohw6y2qj"
+          "id": "aihp8qv83k3pg"
         }
       },
       "ServiceRequest": {
@@ -3553,304 +1211,25 @@
           },
           "customer": {
             "$ref": "#/components/schemas/Customer"
-          }
-        },
-        "x-stoplight": {
-          "id": "ankpaor415nna"
-        }
-      },
-      "CollectionModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "serviceRequests": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/ServiceRequestResponse"
-                }
-              }
-            }
           },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "fjsba7zm0yb7z"
-        }
-      },
-      "CollectionModelObject": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "objects": {
-                "type": "array",
-                "items": {
-                  "type": "object"
-                }
-              }
-            }
+          "user": {
+            "$ref": "#/components/schemas/User"
           },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "sfj9l62at4xiv"
-        }
-      },
-      "EntityModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "IN_PROCESS",
-              "ON_HOLD",
-              "FINISHED"
-            ]
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "price": {
+          "customerId": {
             "type": "integer",
             "format": "int64"
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
           }
         },
         "x-stoplight": {
-          "id": "k31w0hu3w4zwi"
+          "id": "osyo2rjxwvtr6"
         }
       },
-      "PagedModelEntityModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "serviceRequests": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          },
-          "page": {
-            "$ref": "#/components/schemas/PageMetadata"
-          }
-        },
-        "x-stoplight": {
-          "id": "gkkgrqqyuwd2s"
-        }
-      },
-      "CollectionModelEntityModelServiceRequest": {
-        "type": "object",
-        "properties": {
-          "_embedded": {
-            "type": "object",
-            "properties": {
-              "serviceRequests": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EntityModelServiceRequest"
-                }
-              }
-            }
-          },
-          "_links": {
-            "$ref": "#/components/schemas/Links"
-          }
-        },
-        "x-stoplight": {
-          "id": "mb45u4c5ox66b"
-        }
-      },
-      "ChatMessageRequestBody": {
+      "User": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int64"
-          },
-          "content": {
-            "type": "string"
-          },
-          "author": {
-            "type": "string"
-          },
-          "serviceId": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "x-stoplight": {
-          "id": "epf4r1p9rxokm"
-        }
-      },
-      "CustomerRequestBody": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "password": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "USER",
-              "CUSTOMER",
-              "ADMIN"
-            ]
-          },
-          "passwordChangeRequired": {
-            "type": "boolean"
-          },
-          "phoneNumber": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "plainPassword": {
-            "type": "string"
-          },
-          "serviceRequestList": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "username": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "credentialsNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonExpired": {
-            "type": "boolean"
-          },
-          "accountNonLocked": {
-            "type": "boolean"
-          }
-        },
-        "x-stoplight": {
-          "id": "9o1kv4qpvstdu"
-        }
-      },
-      "ServiceRequestRequestBody": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "description": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "IN_PROCESS",
-              "ON_HOLD",
-              "FINISHED"
-            ]
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "price": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "customer": {
-            "type": "string"
-          }
-        },
-        "x-stoplight": {
-          "id": "5sgfaxj33yyl3"
-        }
-      },
-      "ServiceRequestResponse": {
-        "type": "object",
-        "properties": {
-          "description": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "PENDING",
-              "IN_PROCESS",
-              "ON_HOLD",
-              "FINISHED"
-            ]
-          },
-          "endDate": {
-            "type": "string",
-            "format": "date",
-            "readOnly": true
-          },
-          "startDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "price": {
-            "type": "integer",
-            "format": "int64"
-          }
-        },
-        "x-stoplight": {
-          "id": "uci9malq6jgxc"
-        }
-      },
-      "UserRequestBody": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
           },
           "firstName": {
             "type": "string"
@@ -3892,7 +1271,41 @@
           }
         },
         "x-stoplight": {
-          "id": "09gtfim0ltyls"
+          "id": "wjsresecoi77l"
+        }
+      },
+      "ServiceRequestWithCustomerEditorDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "IN_PROCESS",
+              "ON_HOLD",
+              "FINISHED"
+            ]
+          },
+          "price": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customerFirstName": {
+            "type": "string"
+          },
+          "customerLastName": {
+            "type": "string"
+          },
+          "customerPhoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "x-stoplight": {
+          "id": "fh1sx0g9rf45y"
         }
       },
       "ServiceRequestDto": {
@@ -3931,7 +1344,7 @@
           }
         },
         "x-stoplight": {
-          "id": "tgjq4zbtmo0i5"
+          "id": "wiwpf6qir4wuz"
         }
       },
       "ServiceRequestWithUserNameDto": {
@@ -3980,7 +1393,7 @@
           }
         },
         "x-stoplight": {
-          "id": "rm9is3xb00514"
+          "id": "izbnjrme5aw1x"
         }
       },
       "CustomerDto": {
@@ -4002,7 +1415,46 @@
           }
         },
         "x-stoplight": {
-          "id": "pjra7tn0wv7kz"
+          "id": "7t1upp738bzlf"
+        }
+      },
+      "CustomerDtoWithTempPassword": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "plainPassword": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "CUSTOMER",
+              "ADMIN"
+            ]
+          },
+          "phoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "serviceRequestList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceRequestDto"
+            }
+          }
+        },
+        "x-stoplight": {
+          "id": "76yw51libx27b"
         }
       },
       "RegisterRequest": {
@@ -4022,7 +1474,7 @@
           }
         },
         "x-stoplight": {
-          "id": "dn7fb605rbvtt"
+          "id": "vc0shf8p8olz6"
         }
       },
       "TokenRequest": {
@@ -4033,7 +1485,7 @@
           }
         },
         "x-stoplight": {
-          "id": "tlwz2n8qcnr3t"
+          "id": "5y1g68spjcsxf"
         }
       },
       "PasswordChangeRequest": {
@@ -4050,13 +1502,13 @@
           }
         },
         "x-stoplight": {
-          "id": "oycetsbf7mtut"
+          "id": "s0frra6crwgb7"
         }
       },
       "AuthenticationRequest": {
         "type": "object",
         "properties": {
-          "email": {
+          "username": {
             "type": "string"
           },
           "password": {
@@ -4064,33 +1516,81 @@
           }
         },
         "x-stoplight": {
-          "id": "7secjh6egwrm5"
+          "id": "lj20xcugyna2t"
         }
       },
-      "CustomerAuthenticationRequest": {
+      "RevenuePerPeriod": {
         "type": "object",
         "properties": {
-          "phoneNumber": {
+          "month": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "year": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalRevenue": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "x-stoplight": {
+          "id": "t0j3fjo95p57h"
+        }
+      },
+      "ServiceRequestWithDetailsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "integer",
             "format": "int64"
           },
-          "password": {
+          "description": {
             "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "IN_PROCESS",
+              "ON_HOLD",
+              "FINISHED"
+            ]
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "price": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customerId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customerFirstName": {
+            "type": "string"
+          },
+          "customerLastName": {
+            "type": "string"
+          },
+          "customerPhoneNumber": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "userId": {
+            "type": "integer",
+            "format": "int64"
           }
         },
         "x-stoplight": {
-          "id": "9pmcg8aqbka5b"
-        }
-      },
-      "ChatTicket": {
-        "type": "object",
-        "properties": {
-          "ticket": {
-            "type": "string"
-          }
-        },
-        "x-stoplight": {
-          "id": "uwc6ej5bt1319"
+          "id": "1d9x3jsli2zpl"
         }
       },
       "CustomerWithRequestsDto": {
@@ -4113,44 +1613,12 @@
           "serviceRequestList": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ServiceRequest"
+              "$ref": "#/components/schemas/ServiceRequestDto"
             }
           }
         },
         "x-stoplight": {
-          "id": "bxd832jnauwmj"
-        }
-      },
-      "Link": {
-        "type": "object",
-        "properties": {
-          "href": {
-            "type": "string"
-          },
-          "hreflang": {
-            "type": "string"
-          },
-          "title": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "deprecation": {
-            "type": "string"
-          },
-          "profile": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "templated": {
-            "type": "boolean"
-          }
-        },
-        "x-stoplight": {
-          "id": "i5s9vktuwlrn8"
+          "id": "92c7029eyjql7"
         }
       }
     }
