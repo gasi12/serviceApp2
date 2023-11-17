@@ -42,8 +42,8 @@ public class SecurityConfig {
                 .requestMatchers("/gs-guide-websocket/**")
                 .permitAll()
                 .anyRequest()
-                //.permitAll()
-                 .authenticated()
+                .permitAll()
+                 //.authenticated()//todo to wylacza jwt
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

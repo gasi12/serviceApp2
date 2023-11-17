@@ -1,15 +1,15 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDtoMapper;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithDetailsDto;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
+import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithCustomerEditorDto;
+import com.example.serviceApp.serviceRequest.Dto.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @CrossOrigin(origins = "*")
@@ -60,12 +60,24 @@ public class ServiceRequestController {
     }
 
     @PutMapping("/service/{id}")//ok
-    public ServiceRequestDto updateServiceRequest(@PathVariable Long id, @RequestBody ServiceRequestDto serviceRequestDto) {
+    public ServiceRequestDto updateServiceRequest(@PathVariable Long id, @RequestBody ServiceRequestWithCustomerEditorDto serviceRequestDto) {
         return serviceRequestService.updateServiceRequest(id, serviceRequestDto);
     }
 
-    @PutMapping("/service/{id}/user")//ta metoda nie dziala, ale tez jest bez sensu imo
+    @PutMapping("/service/{id}/user")//ok
     public ServiceRequest updateServiceRequestWithUser(@PathVariable Long id, @RequestBody ServiceRequestWithUserNameDto service) {
         return serviceRequestService.updateServiceRequestWithUser(id, service);
+    }
+    @GetMapping("/stats/avgtime")
+    public ResponseEntity<Double> findAverageTime(){
+        return ResponseEntity.ok(serviceRequestService.findAverageServiceDuration());
+    }
+    @GetMapping("/stats/revenue")
+    public List<RevenuePerPeriod> getRevenue(){
+        return serviceRequestService.getRevenueByPeriod();
+    }
+    @GetMapping("/stats/status")
+    public Map<ServiceRequest.Status, Long>getStatusNumbers(){
+        return serviceRequestService.countStatus();
     }
 }

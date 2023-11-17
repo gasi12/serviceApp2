@@ -21,7 +21,7 @@ import java.util.List;
 public class User extends UserImplementation {
     private String email;
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ServiceRequest> serviceRequestList;
     @Override
     public String getUsername() {

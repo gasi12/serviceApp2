@@ -23,4 +23,15 @@ public class ChatMessage {
     private LocalDateTime timestamp;
     private String recipient;
 
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", author='" + author + '\'' +
+                ", serviceId=" + serviceId +
+                ", timestamp=" + timestamp +
+                ", recipient='" + recipient + '\'' +
+                '}';
+    }
 }

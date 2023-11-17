@@ -18,13 +18,13 @@ private final TicketService ticketService;
 
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,//todo wyslac token w pierwszej wiadomosci zamist w uri
+    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
         // Extract the ticket from the URL
         String uri = request.getURI().toString();
         String ticket = uri.substring(uri.indexOf("=") + 1);
-        log.info("TICKET GOT AT INTERCEPTOR "+ticket);//todo wywalic te logi
-       // log.info("VALID TICKETS ARE " + tickets.toString());//todo zmienic z listy na hashmape
+        log.info("TICKET GOT AT INTERCEPTOR "+ticket);
+       // log.info("VALID TICKETS ARE " + tickets.toString());
         return ticketService.validateTicket(ticket,attributes);
 
     }

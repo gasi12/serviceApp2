@@ -27,6 +27,10 @@ public class ServiceRequest {
 //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+
+
+    //h2 @Lob
+    @Column(columnDefinition = "text") //postgres
     private String description;
 
     private Status status = Status.PENDING;
@@ -39,12 +43,12 @@ public class ServiceRequest {
     private LocalDate startDate;
 
     private Long price;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     @JsonBackReference
 
     private Customer customer;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
 
     @JoinColumn(name = "user_id")
     private User user;

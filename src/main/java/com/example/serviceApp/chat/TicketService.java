@@ -16,7 +16,7 @@ public class TicketService {
         String ticket = UUID.randomUUID().toString();
         String ticketOwner = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        tickets.put(ticket,ticketOwner);//todo na pewno nie odwrotnie?
+        tickets.put(ticket,ticketOwner);
 
         return ticket;
     }
@@ -24,7 +24,7 @@ public class TicketService {
     public boolean validateTicket(String ticket, Map<String, Object> attributes){
         // If the ticket is valid, remove it from validTickets and allow the handshake
         if (tickets.containsKey(ticket)) {
-            log.info("ticket valid");//todo wywalic te logi
+            log.info("ticket valid");
             attributes.put("userName", tickets.get(ticket));
             tickets.remove(ticket);
             return true;

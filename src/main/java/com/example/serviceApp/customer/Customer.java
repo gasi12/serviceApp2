@@ -28,7 +28,7 @@ public class Customer extends UserImplementation {
     private String plainPassword;
 
 @JsonManagedReference
-@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ServiceRequest> serviceRequestList;
 
  
