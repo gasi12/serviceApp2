@@ -31,7 +31,11 @@ public class CustomerController {
         public ChatTicket generateTicket() {
         return new ChatTicket(TicketService.generateAndStoreTicket());
     }
+    @PostMapping("/mail")
+    public void sendEmail(){
 
+                customerService.sendEmail();
+    }
 
     @PostMapping("/customer")//ok
     public CustomerDtoWithTempPassword createCustomerDumb(@RequestBody Customer customer) {

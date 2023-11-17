@@ -1,5 +1,6 @@
 package com.example.serviceApp.customer;
 
+import com.example.serviceApp.EmailServiceImpl;
 import com.example.serviceApp.customer.Dto.CustomerDto;
 import com.example.serviceApp.customer.Dto.CustomerWithRequestsDto;
 import com.example.serviceApp.security.User.User;
@@ -28,13 +29,20 @@ import java.util.Optional;
         private final UserRepository userRepository;
         private final ModelMapper modelMapper;
         private final PasswordEncoder passwordEncoder;
-
+        private final EmailServiceImpl emailService;
         private final Cache<Long, List<String>> userCache;
+
+        public void sendEmail(){
+            emailService.sendEmail("gussy1258@gmail.com","TO JEST MAIL Z APKI","Brawo");
+        }
+
         public CustomerWithRequestsDto findCustomerById(Long id){
+
 
         return modelMapper.map(customerRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("user with id " + id +" not found")),CustomerWithRequestsDto.class);
     }
     public Customer findCustomerByIdWithDetails(Long id){
+            log.info("A");
         return customerRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("user with id " + id +" not found"));
     }
     public List<CustomerDto> findAllCustomers(){
@@ -46,11 +54,13 @@ import java.util.Optional;
         return customerDto;
     }
 
+
     public CustomerWithRequestsDto findCustomerByPhoneNumber(Long phoneNumber){
         return modelMapper.map(
                 customerRepository.findByPhoneNumber(phoneNumber).orElseThrow(()->
                         new IllegalArgumentException("user with number "+ phoneNumber + "does not exist")),
                 CustomerWithRequestsDto.class);
+
     }
 public Customer createCustomer2(Customer customer){
     Optional<Customer> existingCustomer = customerRepository.getCustomerByPhoneNumber(customer.getPhoneNumber());
@@ -90,6 +100,7 @@ public Customer createCustomer2(Customer customer){
         if(customer.getPhoneNumber()!=null)
             editedCustomer.setPhoneNumber(customer.getPhoneNumber());
         return modelMapper.map(customerRepository.save(editedCustomer),CustomerDto.class);
+
     }
 @Transactional
     public boolean deleteCustomerById(Long id) {
