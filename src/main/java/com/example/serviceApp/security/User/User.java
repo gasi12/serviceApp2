@@ -2,8 +2,13 @@ package com.example.serviceApp.security.User;
 
 
 import com.example.serviceApp.UserImplementation;
+import com.example.serviceApp.serviceRequest.ServiceRequest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -12,8 +17,12 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "_user")
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class User extends UserImplementation {
     private String email;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ServiceRequest> serviceRequestList;
     @Override
     public String getUsername() {
         return email;

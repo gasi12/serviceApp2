@@ -1,6 +1,5 @@
 package com.example.serviceApp.customExeptions;
 
-import com.example.serviceApp.customExeptions.NoContentException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,6 +52,15 @@ public class GlobalExceptionHandler {
         ErrorMessage errorMessage = new ErrorMessage();
         errorMessage.setStatus(HttpStatus.NOT_FOUND.value());
         errorMessage.setError("Not Found");
+        errorMessage.setMessage(e.getMessage());
+        return errorMessage;
+    }
+    @ExceptionHandler(BadStatusException.class)
+    @ResponseBody
+    public ErrorMessage handleBadStatusException(BadStatusException e) {
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setStatus(HttpStatus.NOT_FOUND.value());
+        errorMessage.setError("Wrong status");
         errorMessage.setMessage(e.getMessage());
         return errorMessage;
     }

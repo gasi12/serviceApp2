@@ -1,10 +1,9 @@
 package com.example.serviceApp.serviceRequest;
 
 import com.example.serviceApp.customer.Customer;
+import com.example.serviceApp.security.User.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-//import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,9 +27,13 @@ public class ServiceRequest {
 //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
+
+
+    //h2 @Lob
+    @Column(columnDefinition = "text") //postgres
     private String description;
 
-    private Status status;
+    private Status status = Status.PENDING;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 
     private LocalDate endDate;
@@ -40,11 +43,15 @@ public class ServiceRequest {
     private LocalDate startDate;
 
     private Long price;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     @JsonBackReference
-    private Customer customer;
 
+    private Customer customer;
+    @ManyToOne//(fetch = FetchType.LAZY)
+
+    @JoinColumn(name = "user_id")
+    private User user;
     public ServiceRequest(String description) {
         this.description = description;
     }
@@ -60,5 +67,25 @@ public class ServiceRequest {
 
     public enum Status {
         PENDING,IN_PROCESS,ON_HOLD,FINISHED
+    }
+    @JsonProperty("customerId")
+    public Long getCustomerId() {
+        if (customer != null) {
+            return customer.getId();
+        }
+        return null;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ServiceRequest{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", status=" + status +
+                ", endDate=" + endDate +
+                ", startDate=" + startDate +
+                ", price=" + price +
+                '}';
     }
 }

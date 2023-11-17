@@ -6,16 +6,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -23,7 +25,14 @@ import java.util.function.Function;
 public class JwtService {
     private final CustomUserDetailsService userDetailsService;
     private final CustomerUserDetailsService customerUserDetailsService;
-    private static final String SECRET_KEY ="KQrSEqVRHxIPgBLuLhMRIHrPzme94ofdV9Siwsa0B1me3Hj4ZHhNM0LRZKMLacoR";
+
+    private static String SECRET_KEY;
+
+    @PostConstruct
+    public void init(){
+        SecretKey key=Keys.secretKeyFor(SignatureAlgorithm.HS256);
+        SECRET_KEY = Encoders.BASE64.encode(key.getEncoded());
+    }
     public String extractUsername(String token) {
 
         return extractClaim(token,Claims::getSubject);

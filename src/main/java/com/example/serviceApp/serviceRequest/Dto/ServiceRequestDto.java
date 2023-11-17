@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +23,5 @@ public class ServiceRequestDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate endDate;
     private Long price;
+   // private Long userId;
 }

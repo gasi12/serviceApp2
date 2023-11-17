@@ -1,5 +1,6 @@
 package com.example.serviceApp.security.config;
 
+import com.example.serviceApp.UserDetailsServiceImplementation;
 import com.example.serviceApp.customer.CustomerUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -7,12 +8,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -23,7 +22,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImplementation userDetailsService;
     private final CustomerUserDetailsService customerUserDetailsService;
     @Override
 
@@ -60,11 +59,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                log.info(SecurityContextHolder.getContext().getAuthentication().toString()); //todo to jest testwowo w logach!!!!
+               // log.info(SecurityContextHolder.getContext().getAuthentication().toString()); //todo to jest testwowo w logach!!!!
             }
         }
-        log.info(SecurityContextHolder.getContext().getAuthentication().getName()+ "to jest name");
-        log.info(SecurityContextHolder.getContext().getAuthentication().toString());//todo to jest testwowo w logach!!!!
+      //  log.info(SecurityContextHolder.getContext().getAuthentication().getName()+ "to jest name");
+      //  log.info(SecurityContextHolder.getContext().getAuthentication().toString());//todo to jest testwowo w logach!!!!
         filterChain.doFilter(request,response);
 
     }

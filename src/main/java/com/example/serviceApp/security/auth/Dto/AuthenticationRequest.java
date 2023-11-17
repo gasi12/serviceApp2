@@ -1,6 +1,9 @@
 package com.example.serviceApp.security.auth.Dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -8,6 +11,6 @@ import lombok.*;
 @AllArgsConstructor
 
 public class AuthenticationRequest {
-    private String email;
+    private String username;
     private String password;
 }

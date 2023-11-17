@@ -1,19 +1,19 @@
 package com.example.serviceApp;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.swagger.v3.core.jackson.ModelResolver;
-import org.modelmapper.ModelMapper;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 //@EnableWebMvc
+
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @SpringBootApplication
 public class ServiceAppApplication {
 
@@ -22,4 +22,16 @@ public class ServiceAppApplication {
 		SpringApplication.run(ServiceAppApplication.class, args);
 	}
 
+	@Bean
+	public ConcurrentHashMap<Long, List<String>> userOrdersCache() {
+		return new ConcurrentHashMap<>();
+	}
+
+	@Bean
+	public Cache<Long, List<String>> userCache(){
+		return  CacheBuilder.newBuilder()
+				.maximumSize(100)
+				.expireAfterWrite(10, TimeUnit.MINUTES)
+				.build();
+	}
 }
