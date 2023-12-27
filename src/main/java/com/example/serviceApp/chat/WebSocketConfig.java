@@ -35,31 +35,27 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setHandshakeHandler(new DefaultHandshakeHandler() {
                     @Override
                     protected Principal determineUser(ServerHttpRequest request, WebSocketHandler wsHandler, Map<String, Object> attributes) {
-//                        // Extract the ticket from the URL
-//                        String uri = request.getURI().toString();
-//                        String ticket = uri.substring(uri.indexOf("=") + 1);
-//
-//                        // Validate the ticket and get the username
-//                        if (ticketService.validateTicket(ticket, attributes)) {
-//                            String userName = (String) attributes.get("userName");
-//
-//                            // Return a Principal with the username
-//                            return new Principal() {
-//                                @Override
-//                                public String getName() {
-//                                    return userName;
-//                                }
-//                            };
-//                        }
-//                        else {
-//                            return null;
-//                        }
-                        return new Principal() {
-                            @Override
-                            public String getName() {
-                                return "default@admin";
-                            }
-                        };
+                        // Extract the ticket from the URL
+                        String uri = request.getURI().toString();
+                        String ticket = uri.substring(uri.indexOf("=") + 1);
+
+                        // Validate the ticket and get the username
+                        if (ticketService.validateTicket(ticket, attributes)) {
+                            String userName = (String) attributes.get("userName");
+                            log.info(userName);
+                            // Return a Principal with the username
+                            return () -> userName;
+                        }
+                        else {
+                            log.info("nie ma ticketa");
+                            return null;
+                        }
+//                        return new Principal() {
+//                            @Override
+//                            public String getName() {
+//                                return "default@admin";
+//                            }
+//                        };
                     }
                 })
                 .setAllowedOrigins("http://localhost:3000")

@@ -1,8 +1,10 @@
 package com.example.serviceApp.customExeptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -38,6 +40,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
     public ErrorMessage handleUnauthorized(HttpClientErrorException.Unauthorized e) {
         ErrorMessage errorMessage = new ErrorMessage();
         errorMessage.setStatus(HttpStatus.UNAUTHORIZED.value());
@@ -47,6 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ErrorMessage handleIllegalArgumentException(IllegalArgumentException e) {
         ErrorMessage errorMessage = new ErrorMessage();
@@ -57,6 +61,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(BadStatusException.class)
     @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorMessage handleBadStatusException(BadStatusException e) {
         ErrorMessage errorMessage = new ErrorMessage();
         errorMessage.setStatus(HttpStatus.NOT_FOUND.value());
@@ -64,6 +69,7 @@ public class GlobalExceptionHandler {
         errorMessage.setMessage(e.getMessage());
         return errorMessage;
     }
+
 
     @Data
     @AllArgsConstructor

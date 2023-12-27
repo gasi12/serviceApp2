@@ -14,12 +14,12 @@ import java.util.List;
 @Repository
 public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, Long> {
 
-    @EntityGraph(attributePaths = {"customer", "user"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"customer", "user","statusHistory"}, type = EntityGraph.EntityGraphType.LOAD)
     List<ServiceRequest> findAll();
 
-    @EntityGraph(attributePaths = {"customer", "user"}, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(attributePaths = {"customer", "user","statusHistory"}, type = EntityGraph.EntityGraphType.LOAD)
     Page<ServiceRequest> findAll(Pageable page);
-    List<ServiceRequest> findAllByStatus(ServiceRequest.Status status);
+    List<ServiceRequest> findAllByLastStatus(ServiceRequest.Status status);
     @Query("SELECT AVG(r.endDate-r.startDate) FROM ServiceRequest r")
     Double findAverageServiceDuration();
     @Query("SELECT new com.example.serviceApp.serviceRequest.RevenuePerPeriod(" +
@@ -29,7 +29,7 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
             "GROUP BY YEAR(s.endDate), MONTH(s.endDate)")
     List<RevenuePerPeriod> findTotalRevenueGroupedByPeriod();
 
-    @Query("SELECT s.status, count(s.status)from ServiceRequest s where s.endDate is null group by s.status")
+    @Query("SELECT s.lastStatus, count(s.lastStatus)from ServiceRequest s where s.endDate is null group by s.lastStatus")
     List<Object[]> getStatusNumbers();
 
 }

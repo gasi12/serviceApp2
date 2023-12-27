@@ -39,11 +39,13 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/v3/api-docs/**")
                 .permitAll()
-                .requestMatchers("/gs-guide-websocket/**")
+                .requestMatchers("/mywebsockets/**")//todo zmienic
+                .permitAll()
+                .requestMatchers("/customer/users/getall")
                 .permitAll()
                 .anyRequest()
-                .permitAll()
-                 //.authenticated()//todo to wylacza jwt
+                //.permitAll()
+                .authenticated()//todo to wylacza jwt
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

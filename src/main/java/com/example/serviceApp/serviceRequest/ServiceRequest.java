@@ -2,6 +2,7 @@ package com.example.serviceApp.serviceRequest;
 
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.security.User.User;
+import com.example.serviceApp.serviceRequest.status.StatusHistory;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -9,8 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -33,7 +37,7 @@ public class ServiceRequest {
     @Column(columnDefinition = "text") //postgres
     private String description;
 
-    private Status status = Status.PENDING;
+    private Status lastStatus = Status.PENDING;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 
     private LocalDate endDate;
@@ -43,22 +47,28 @@ public class ServiceRequest {
     private LocalDate startDate;
 
     private Long price;
+
+    private String deviceName;
+
     @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     @JsonBackReference
-
     private Customer customer;
     @ManyToOne//(fetch = FetchType.LAZY)
 
     @JoinColumn(name = "user_id")
     private User user;
+
+
+    @OneToMany(mappedBy = "serviceRequest", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StatusHistory> statusHistory;
     public ServiceRequest(String description) {
         this.description = description;
     }
 
-    public ServiceRequest(String description, Status status, LocalDate endDate, LocalDate startDate, Long price, Customer customer) {
+    public ServiceRequest(String description, Status lastStatus, LocalDate endDate, LocalDate startDate, Long price, Customer customer) {
         this.description = description;
-        this.status = status;
+        this.lastStatus = lastStatus;
         this.endDate = endDate;
         this.startDate = startDate;
         this.price = price;
@@ -82,7 +92,7 @@ public class ServiceRequest {
         return "ServiceRequest{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
-                ", status=" + status +
+                ", status=" + lastStatus +
                 ", endDate=" + endDate +
                 ", startDate=" + startDate +
                 ", price=" + price +

@@ -54,6 +54,7 @@ private final UserDetailsServiceImplementation userDetailsServiceImplementation;
                admin.setRole(role);
                admin.setPassword(passwordEncoder.encode(password));
                admin.setPasswordChangeRequired(true);
+               admin.setIsPhoneNumberVerified(true);
 
 
                 userRepository.save(admin);

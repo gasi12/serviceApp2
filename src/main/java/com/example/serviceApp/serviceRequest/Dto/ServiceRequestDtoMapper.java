@@ -14,7 +14,7 @@ public class ServiceRequestDtoMapper {
     public static ServiceRequestDto mapToServiceRequestDto( ServiceRequest request) {
         return ServiceRequestDto.builder()
                 .description(request.getDescription())
-                .status(request.getStatus())
+                .lastStatus(request.getLastStatus())
                 .startDate(request.getStartDate())
                 .id(request.getId())
                 .price(request.getPrice())

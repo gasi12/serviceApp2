@@ -9,38 +9,46 @@ import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.security.auth.Dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
+@RequestMapping( "/auth")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+//@RequestMapping()
 @CrossOrigin(origins = "*")
 public class AuthController {
     private final AuthService authService;
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
+
+    @GetMapping("/getusers")
+    public List<User> getUsers(){
+       return userRepository.findAll();
+
+    }
     @PostMapping("/register/user")
-    public ResponseEntity register(@RequestBody RegisterRequest request){
+    public AuthenticationResponse register(@RequestBody CustomerRegisterRequest request){
         AuthenticationResponse response = authService.register(request);
-        if (response == null) {
-            return ResponseEntity.badRequest().body("USER EXIST"); // Return bad request if email is already taken
-        }
-        return ResponseEntity.ok(response); // Return ok response with AuthenticationResponse
+
+
+       return response; // Return ok response with AuthenticationResponse
     }
 
     @PostMapping("/authenticate/user")
-    public ResponseEntity authenticateUser(@RequestBody AuthenticationRequest request){
+    public AuthenticationResponse authenticateUser(@RequestBody AuthenticationRequest request){
         AuthenticationResponse response = authService.authenticate(request, userRepository::findByEmail);
-        return ResponseEntity.ok(response);
+        return response;
     }
     @PostMapping("/authenticate/customer")
-    public ResponseEntity authenticateCustomer(@RequestBody AuthenticationRequest request){
+    public AuthenticationResponse authenticateCustomer(@RequestBody AuthenticationRequest request){
         Function<String, Optional<? extends UserImplementation>> finder = userName->{
             try {
                 Long phoneNumber = Long.parseLong(request.getUsername());
@@ -51,7 +59,7 @@ public class AuthController {
             }
         };
         AuthenticationResponse response = authService.authenticate(request,finder);
-        return ResponseEntity.ok(response);
+        return response;
     }
 //@PostMapping("/authenticate/user")
 //public ResponseEntity authenticate(@RequestBody AuthenticationRequest request){
@@ -81,7 +89,24 @@ public class AuthController {
         return authService.changeCustomerPassword(request);
     }
     @PostMapping("/refresh")
-    public ResponseEntity refreshAuthentication(@RequestBody TokenRequest request){
+    public AuthenticationResponse refreshAuthentication(@RequestBody RefreshTokenRequest request){
         return authService.refreshAuthentication(request);
     }
+    @PostMapping("/register/customer")
+    public ResponseEntity<String> registerCustomer(@RequestBody AuthenticationRequest request)throws IOException, InterruptedException {
+        if (authService.registerCustomer(request)) {
+            return ResponseEntity.ok().body("User registered successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Unable to register user");
+        }
+    }
+    @PostMapping("/register/customer/verify")
+    public ResponseEntity<String> verifyCustomerPhoneNumber(@RequestBody AuthenticationRequest request) throws IOException, InterruptedException{
+        if (authService.validateToken(request)) {
+            return ResponseEntity.ok().body("User verified successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Unable to verify");
+        }
+    }
+
 }

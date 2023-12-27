@@ -1,30 +1,27 @@
 package com.example.serviceApp.customer.Dto;
 
-import com.example.serviceApp.security.User.Role;
-import com.example.serviceApp.serviceRequest.ServiceRequest;
+import com.example.serviceApp.customer.Customer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
- * DTO for {@link com.example.serviceApp.customer.Customer}
+ * DTO for {@link Customer}
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CustomerDtoWithTempPassword implements Serializable {
-    private Long id;
+public class CustomerAndServiceCreationDto implements Serializable {
     private String firstName;
     private String lastName;
-//    private Role role; // po co to tu
     private Long phoneNumber;
-    private List<ServiceRequestDto> serviceRequestList;
+
+    private List<ServiceRequestCreationDto> serviceRequestList;
 
     /**
      * DTO for {@link com.example.serviceApp.serviceRequest.ServiceRequest}
@@ -33,13 +30,9 @@ public class CustomerDtoWithTempPassword implements Serializable {
     @AllArgsConstructor
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class ServiceRequestDto implements Serializable {
-        private Long id;
+    public static class ServiceRequestCreationDto implements Serializable {
         private String description;
-        private ServiceRequest.Status lastStatus;
-        private LocalDate endDate;
-        private LocalDate startDate;
         private Long price;
-//        private Long userId;
+        private String deviceName;
     }
 }

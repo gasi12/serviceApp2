@@ -17,7 +17,7 @@ public class TicketService {
         String ticketOwner = SecurityContextHolder.getContext().getAuthentication().getName();
 
         tickets.put(ticket,ticketOwner);
-
+        log.info("put ticket"+ ticket + " to " + ticketOwner);
         return ticket;
     }
 
@@ -29,6 +29,7 @@ public class TicketService {
             tickets.remove(ticket);
             return true;
         } else {
+            log.info("ticket: "+ ticket+ " is invalid");
             return false;
         }
     }

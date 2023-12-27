@@ -17,11 +17,11 @@ public class ServiceRequestDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
     private String description;
-    private ServiceRequest.Status status;
+    private ServiceRequest.Status lastStatus;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate startDate;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate endDate;
     private Long price;
-   // private Long userId;
+
 }

@@ -2,9 +2,10 @@ package com.example.serviceApp.customer;
 
 import com.example.serviceApp.chat.ChatTicket;
 import com.example.serviceApp.chat.TicketService;
-import com.example.serviceApp.customer.Dto.CustomerDto;
+import com.example.serviceApp.customer.Dto.CustomerAndServiceCreationDto;
+import com.example.serviceApp.customer.Dto.CustomerInfoDto;
 import com.example.serviceApp.customer.Dto.CustomerDtoWithTempPassword;
-import com.example.serviceApp.customer.Dto.CustomerWithRequestsDto;
+import com.example.serviceApp.customer.Dto.CustomerAndRequestDto;
 import com.google.common.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -37,13 +38,13 @@ public class CustomerController {
                 customerService.sendEmail();
     }
 
-    @PostMapping("/customer")//ok
-    public CustomerDtoWithTempPassword createCustomerDumb(@RequestBody Customer customer) {
+    @PostMapping("/customer")//ok now
+    public CustomerDtoWithTempPassword createCustomerDumb(@RequestBody CustomerAndServiceCreationDto customer) {
         return modelMapper.map(customerService.createCustomer2(customer), CustomerDtoWithTempPassword.class);
     }
 
-    @GetMapping("/customer/{id}")//ok
-    public CustomerWithRequestsDto findCustomerById(@PathVariable Long id) {
+    @GetMapping("/customer/{id}")//ok now
+    public CustomerAndRequestDto findCustomerById(@PathVariable Long id) {
         return customerService.findCustomerById(id);
 
     }
@@ -52,18 +53,18 @@ public class CustomerController {
         return customerService.findCustomerByIdWithDetails(id);
     }
 
-    @PutMapping("/customer/{id}")//ok
-    public CustomerDto editCustomerById(@PathVariable Long id, @RequestBody CustomerDto customer) {
+    @PutMapping("/customer/{id}")//ok now
+    public CustomerInfoDto editCustomerById(@PathVariable Long id, @RequestBody CustomerInfoDto customer) {
         return customerService.editCustomerById(id, customer);
     }
 
     @GetMapping("/customer/phonenumber/{number}")//ok
-    public CustomerWithRequestsDto findCustomerByPhoneNumber(@PathVariable Long number) {
+    public CustomerAndRequestDto findCustomerByPhoneNumber(@PathVariable Long number) {
         return customerService.findCustomerByPhoneNumber(number);
     }
 
     @GetMapping("/customer/getall")//ok
-    public List<CustomerDto> findAllCustomers() {
+    public List<CustomerInfoDto> findAllCustomers() {
         return customerService.findAllCustomers();
     }
     @DeleteMapping("/customer/{id}")

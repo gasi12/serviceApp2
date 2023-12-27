@@ -1,6 +1,7 @@
 package com.example.serviceApp.chat;
 
 import com.google.common.cache.Cache;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -62,10 +64,12 @@ public class GreetingController {
 //}
 
     @MessageMapping("/greetings")
-    public void reply(@Payload String message, Principal user) {
+    public void reply(@Payload IncomingMessage message, Principal user) {
         log.info("principal name "+ user.getName());
-        String response = "Hello " + message;
-        simpMessagingTemplate.convertAndSendToUser("efault@admin", "/queue/greetings", response);
+        String response = "Hello " + message.getMessage();
+        ChatMessage chatMessage = ChatMessage.builder().content(message.getMessage()).author(user.getName()).recipient(message.getAuthor()).timestamp(LocalDateTime.now()).build();
+
+        simpMessagingTemplate.convertAndSendToUser(message.getAuthor(), "/queue/greetings", response);
     }
 }
 

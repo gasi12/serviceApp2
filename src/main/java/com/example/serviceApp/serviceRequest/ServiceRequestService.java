@@ -1,14 +1,13 @@
 package com.example.serviceApp.serviceRequest;
 
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithCustomerEditorDto;
+import com.example.serviceApp.serviceRequest.Dto.*;
 import com.example.serviceApp.customExeptions.BadStatusException;
 import com.example.serviceApp.customer.Customer;
 import com.example.serviceApp.customer.CustomerRepository;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestDto;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithDetailsDto;
-import com.example.serviceApp.serviceRequest.Dto.ServiceRequestWithUserNameDto;
+import com.example.serviceApp.serviceRequest.status.StatusHistory;
+import com.example.serviceApp.serviceRequest.status.StatusHistoryDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -59,25 +56,34 @@ public class ServiceRequestService {
     }
 
     @Transactional
-    public ServiceRequest addServiceRequestToUser(Long id, ServiceRequestDto requestDto) {
+    public ServiceRequest addServiceRequestToUser(Long id, ServiceRequestWithUserNameDto requestDto) {
         ServiceRequest newService = modelMapper.map(requestDto, ServiceRequest.class);
-        User u = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new IllegalArgumentException());
+        List<StatusHistory> status = new ArrayList<>();
+        status.add(new StatusHistory(ServiceRequest.Status.PENDING, "Request created", newService, LocalDateTime.now()));
+
+        User u = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new IllegalArgumentException("user not found"));
 
         Customer newServiceUser = customerRepository.getCustomerById(id).orElseThrow(() ->
-                new IllegalArgumentException("user doesnt exist"));
+                new IllegalArgumentException("customer of given id doesnt exist"));
+        newServiceUser.setFirstName(requestDto.getCustomerFirstName());
+        newServiceUser.setLastName(requestDto.getCustomerLastName());
+        newServiceUser.setPhoneNumber(requestDto.getCustomerPhoneNumber());
+
+        newService.setStatusHistory(status);
         newService.setCustomer(newServiceUser);
+        newService.setLastStatus(ServiceRequest.Status.PENDING);
+        newService.setDeviceName(requestDto.getDeviceName());
         newService.setUser(u);
+
         return serviceRequestRepository.save(newService);
-
-
     }
 
-    public ServiceRequest findById(Long id) {
-        return serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("service with id " + id + " not found"));
+    public ServiceRequestWithDetailsDto findById(Long id) {
+        return modelMapper.map(serviceRequestRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("service with id " + id + " not found")), ServiceRequestWithDetailsDto.class);
     }
 
 
-    public List<ServiceRequestWithDetailsDto> findAllServiceRequestsWithUserName2(int pageNo, int pageSize) {
+    public List<ServiceRequestWithUserNameDto> findAllServiceRequestsWithUserName2(int pageNo, int pageSize) {
         if (pageNo < 0 || pageSize <= 0) {
             throw new IllegalArgumentException("Invalid page number or size");
         }
@@ -86,58 +92,89 @@ public class ServiceRequestService {
         Page<ServiceRequest> page = serviceRequestRepository.findAll(pageable);
 
         List<ServiceRequest> serviceRequests = page.getContent();
-        return serviceRequests.stream()
-                .map(s -> modelMapper.map(s, ServiceRequestWithDetailsDto.class))
-                .collect(Collectors.toList());
+        //na szczescie pisze to sam wiec nikt tego prawdopodbnie nie zobaczy
+        return serviceRequests.stream().map(s -> {
+
+
+            return ServiceRequestWithUserNameDto.builder()
+                    .id(s.getId())
+                    .description(s.getDescription())
+                    .endDate(s.getEndDate())
+                    .startDate(s.getStartDate())
+                    .price(s.getPrice())
+                    .customerFirstName(s.getCustomer().getFirstName())
+                    .customerLastName(s.getCustomer().getLastName())
+                    .customerPhoneNumber(s.getCustomer().getPhoneNumber())
+                    .lastStatus(s.getLastStatus())
+                    .deviceName(s.getDeviceName())
+                    .build();
+        }).collect(Collectors.toList());
+
+// nie mowie, jest to schludne aczkolwiek pomija za duzo pol,
+// a ja nie mam zamiaru konfigurowac mappera dla jednej funkcji
+// nie ma teraz na to czasu
+//        return serviceRequests.stream()
+//                .map(s -> modelMapper.map(s, ServiceRequestWithDetailsDto.class))
+//                .collect(Collectors.toList());
     }
 
 
-    public List<ServiceRequestWithDetailsDto> findAllByStatus(String status) {
+    public List<ServiceRequestWithUserNameDto> findAllByStatus(String status) {
         if (EnumUtils.isValidEnum(ServiceRequest.Status.class, status)) {
 
-            return serviceRequestRepository.findAllByStatus(ServiceRequest.Status.valueOf(status)).stream().map(serviceRequest -> modelMapper.map(serviceRequest, ServiceRequestWithDetailsDto.class)).toList();
+            return serviceRequestRepository.findAllByLastStatus(ServiceRequest.Status.valueOf(status)).stream().map(serviceRequest -> modelMapper.map(serviceRequest, ServiceRequestWithUserNameDto.class)).toList();
         } else
             throw new BadStatusException("Status not valid");
     }
 
     @Transactional
-    public ServiceRequestDto updateServiceRequest(Long id, ServiceRequestWithCustomerEditorDto serviceRequestDto) {
+    public ServiceRequestWithDetailsDto updateServiceRequest(Long id, ServiceRequestUpdateDto serviceRequestDto) {
         ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Service request with id " + id + " not found"));
         log.info(serviceRequest.toString());
         modelMapper.map(serviceRequestDto, serviceRequest);//todo mapper mapuje id i  sie robi afera
-       // serviceRequest.setDescription(serviceRequestDto.getDescription());
-       // serviceRequest.setPrice(serviceRequestDto.getPrice());
-       // serviceRequest.setStatus(serviceRequestDto.getStatus());
+        // serviceRequest.setDescription(serviceRequestDto.getDescription());
+        // serviceRequest.setPrice(serviceRequestDto.getPrice());
+        // serviceRequest.setStatus(serviceRequestDto.getStatus());
         serviceRequestRepository.save(serviceRequest);
-        return modelMapper.map(serviceRequest, ServiceRequestDto.class);
+        return modelMapper.map(serviceRequest, ServiceRequestWithDetailsDto.class);
     }
 
 
     @Transactional
-    public ServiceRequest updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {
+    public ServiceRequestWithUserNameDto updateServiceRequestWithUser(Long id, ServiceRequestWithUserNameDto request) {
         ServiceRequest serviceRequest = serviceRequestRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Service request with id" + id + " not found"));
-        Optional<Customer> user = customerRepository.findByPhoneNumber(request.getPhoneNumber());
-        if (user.isPresent()) {
-            if (!serviceRequest.getCustomer().getPhoneNumber().equals(user.get().getPhoneNumber())) {
-                throw new IllegalArgumentException("Mismatched phone numbers: service request user and provided user");
-            }
+        Optional<Customer> customerFromDb = customerRepository.findByPhoneNumber(request.getCustomerPhoneNumber());
+        if (customerFromDb.isPresent() && !customerFromDb.get().getId().equals(serviceRequest.getCustomerId())) {
+            throw new IllegalArgumentException("user with given number already exist");
         }
         Customer customer = serviceRequest.getCustomer();
-//        modelMapper.map(request, customer);
-//        modelMapper.map(request, serviceRequest);//todo nie dziala
-        customer.setFirstName(request.getFirstName());
-        customer.setLastName(request.getLastName());
-        customer.setPhoneNumber(request.getPhoneNumber());
+        customer.setFirstName(request.getCustomerFirstName());
+        customer.setLastName(request.getCustomerLastName());
+        customer.setPhoneNumber(request.getCustomerPhoneNumber());
         serviceRequest.setPrice(request.getPrice());
         serviceRequest.setDescription(request.getDescription());
-        serviceRequest.setStatus(request.getStatus());
-        if (serviceRequest.getStatus().equals(ServiceRequest.Status.FINISHED)) {
+        serviceRequest.setDeviceName(request.getDeviceName());
+        serviceRequest.setCustomer(customer);
+
+        return modelMapper.map(serviceRequestRepository.save(serviceRequest), ServiceRequestWithUserNameDto.class);
+    }
+
+    public StatusHistoryDto addStatus(Long serviceId, StatusHistoryDto status) {
+        ServiceRequest serviceRequest = serviceRequestRepository.findById(serviceId).orElseThrow(() -> new IllegalArgumentException("Service " + serviceId + " not found"));
+        List<StatusHistory> existingStatusList = serviceRequest.getStatusHistory();
+        serviceRequest.setLastStatus(status.getStatus());
+        StatusHistory statusToAdd = new StatusHistory(status.getStatus(), status.getComment(), serviceRequest, LocalDateTime.now());
+        if (status.getStatus().equals(ServiceRequest.Status.FINISHED)) {
             serviceRequest.setEndDate(LocalDate.now());
         }
-        return serviceRequestRepository.save(serviceRequest);
+        existingStatusList.add(statusToAdd);
+        serviceRequest.setStatusHistory(existingStatusList);
+        serviceRequestRepository.save(serviceRequest);
+        return modelMapper.map(serviceRequest.getStatusHistory().get(serviceRequest.getStatusHistory().size() - 1), StatusHistoryDto.class);
     }
+
     //todo przeniesc to do analityki czy cos
 
     public Double findAverageServiceDuration() {
