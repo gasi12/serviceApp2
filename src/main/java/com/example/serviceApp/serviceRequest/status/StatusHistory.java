@@ -20,6 +20,7 @@ public class StatusHistory {
     @Column(insertable = false, updatable = false)
 
     private Long id;
+
     private ServiceRequest.Status status;
     private String comment;
     @ManyToOne//(fetch = FetchType.LAZY)

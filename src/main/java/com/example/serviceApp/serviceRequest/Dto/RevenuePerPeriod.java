@@ -1,4 +1,4 @@
-package com.example.serviceApp.serviceRequest;
+package com.example.serviceApp.serviceRequest.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

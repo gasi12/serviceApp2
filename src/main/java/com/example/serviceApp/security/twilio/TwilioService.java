@@ -19,9 +19,9 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 @Slf4j
 public class TwilioService {
-    private static final String ACCOUNT_SID = "";
-    private static final String AUTH_TOKEN = "";
-    private static final String SERVICE_SID = "";
+    private static final String ACCOUNT_SID = System.getenv("TWILIO_ACCOUNT_SID");
+    private static final String AUTH_TOKEN = System.getenv("TWILIO_AUTH_TOKEN");
+    private static final String SERVICE_SID = System.getenv("TWILIO_SERVICE_SID");
 
     public void sendToken(String phoneNumber) throws IOException, InterruptedException {
         String url = "https://verify.twilio.com/v2/Services/" + SERVICE_SID + "/Verifications";

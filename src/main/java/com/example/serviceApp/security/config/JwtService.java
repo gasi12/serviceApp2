@@ -62,7 +62,7 @@ public class JwtService {
     public String generateToken(UserDetails userDetails, String userType){
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("userType", userType);
-        return generateToken(extraClaims, userDetails, (100000*60L));
+        return generateToken(extraClaims, userDetails, (100000*60L)); //100000*60L
     }
 //    public String generateToken(UserDetails userDetails){
 //       return generateToken(new HashMap<>(),userDetails,(100000*60L));

@@ -42,7 +42,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         // Validate the ticket and get the username
                         if (ticketService.validateTicket(ticket, attributes)) {
                             String userName = (String) attributes.get("userName");
-                            log.info(userName);
+                            log.info("validated ticket for" + userName);
                             // Return a Principal with the username
                             return () -> userName;
                         }

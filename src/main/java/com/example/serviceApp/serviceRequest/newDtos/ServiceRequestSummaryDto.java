@@ -1,30 +1,36 @@
-package com.example.serviceApp.serviceRequest.Dto;
+package com.example.serviceApp.serviceRequest.newDtos;
 
+import com.example.serviceApp.device.Device;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
+/**
+ * DTO for {@link ServiceRequest}
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ServiceRequestWithUserNameDto {
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ServiceRequestSummaryDto implements Serializable {
     private Long id;
     private String description;
     private ServiceRequest.Status lastStatus;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate startDate;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate endDate;
+    private Long price;
+    private String deviceName;
+    private Device.deviceType deviceType;
+    private Long customerId;
     private String customerFirstName;
     private String customerLastName;
     private Long customerPhoneNumber;
-    private Long price;
-    private String deviceName;
+    private Long userId;
 }

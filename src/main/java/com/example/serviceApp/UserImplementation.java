@@ -31,7 +31,7 @@ public abstract class UserImplementation implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role = Role.CUSTOMER;
     private Boolean passwordChangeRequired = false;//todo pamietac to na koncu dac na true
-    private Boolean isPhoneNumberVerified;
+    private Boolean isPhoneNumberVerified = false;
 
     public UserImplementation(String firstname, String lastname, String password, Role role) {
         this.firstName = firstname;
@@ -39,6 +39,12 @@ public abstract class UserImplementation implements UserDetails {
         this.password = password;
         this.role = role;
     }
+
+    public UserImplementation(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public boolean isPasswordChangeRequired(){
         return passwordChangeRequired;
     }

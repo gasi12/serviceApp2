@@ -1,7 +1,9 @@
-package com.example.serviceApp.serviceRequest.status;
+package com.example.serviceApp.serviceRequest.status.dto;
 
 import com.example.serviceApp.serviceRequest.ServiceRequest;
+import com.example.serviceApp.serviceRequest.status.StatusHistory;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +22,6 @@ import java.time.LocalDateTime;
 public class StatusHistoryDto implements Serializable {
     private ServiceRequest.Status status;
     private String comment;
+    @JsonProperty()
     private LocalDateTime time;
 }

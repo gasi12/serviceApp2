@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public ErrorMessage handleIllegalArgumentException(IllegalArgumentException e) {
         ErrorMessage errorMessage = new ErrorMessage();

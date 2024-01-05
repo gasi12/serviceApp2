@@ -1,8 +1,12 @@
 package com.example.serviceApp.customer;
 
 import com.example.serviceApp.UserImplementation;
+import com.example.serviceApp.device.Device;
+import com.example.serviceApp.security.User.Role;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,31 +22,30 @@ import java.util.List;
 
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 
 public class Customer extends UserImplementation {
 
 
     private Long phoneNumber;
 
-    @Transient
-    private String plainPassword;
 
-@JsonManagedReference
-@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ServiceRequest> serviceRequestList;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Device> devices;
+
+
 
  
     @Override
     public String getUsername() {
         return phoneNumber.toString();
     }
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "phoneNumber=" + phoneNumber +
-                ", serviceRequestList=" + serviceRequestList.size() +
-                '}';
+
+    public Customer(String firstname, String lastname, Long phoneNumber) {
+        super(firstname, lastname);
+        this.phoneNumber = phoneNumber;
     }
-
-
 }

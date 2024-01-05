@@ -1,8 +1,10 @@
-package com.example.serviceApp.customer.Dto;
+package com.example.serviceApp.customer.Dto.devicedto;
 
 import com.example.serviceApp.customer.Customer;
+import com.example.serviceApp.device.Device;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,24 +17,27 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CustomerAndServiceCreationDto implements Serializable {
+public class CustomerAndDevicesDto implements Serializable {
+    private Long id;
     private String firstName;
     private String lastName;
     private Long phoneNumber;
-
-    private List<ServiceRequestCreationDto> serviceRequestList;
+    private List<DeviceDto> devices;
 
     /**
-     * DTO for {@link com.example.serviceApp.serviceRequest.ServiceRequest}
+     * DTO for {@link com.example.serviceApp.device.Device}
      */
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class ServiceRequestCreationDto implements Serializable {
-        private String description;
-        private Long price;
+    public static class DeviceDto implements Serializable {
+        private Long id;
         private String deviceName;
+        private String deviceSerialNumber;
+        private Device.deviceType deviceType;
+
     }
 }
