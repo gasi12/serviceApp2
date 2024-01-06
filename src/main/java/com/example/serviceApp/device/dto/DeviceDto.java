@@ -12,6 +12,7 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -48,9 +49,9 @@ public class DeviceDto implements Serializable {
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         private ServiceRequest.Status lastStatus;
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        private LocalDate endDate;
+        private LocalDateTime endDate;
         @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        private LocalDate startDate;
+        private LocalDateTime startDate;
 
         private Long price;
 

@@ -45,7 +45,7 @@ public class DeviceService {
             }
             for(ServiceRequest s : serviceRequestList){
                 s.getStatusHistory().add(new StatusHistory(ServiceRequest.Status.PENDING,"Request created",s, LocalDateTime.now()));
-                s.setStartDate(LocalDate.now());
+                s.setStartDate(LocalDateTime.now());
             }
 //            Device device = new Device(deviceDto.getDeviceName(), deviceDto.getDeviceSerialNumber(),serviceRequestList,customer);
             Device device= Device.builder()
@@ -87,7 +87,7 @@ public class DeviceService {
                 s.setStatusHistory(new ArrayList<>());
                 s.getStatusHistory().add(new StatusHistory(ServiceRequest.Status.PENDING,"Request created",s, LocalDateTime.now()));
                 s.setLastStatus(ServiceRequest.Status.PENDING);
-                s.setStartDate(LocalDate.now());
+                s.setStartDate(LocalDateTime.now());
                 s.setDevice(device);
                 s.setUser(u);
                 device.getServiceRequestList().add(s);

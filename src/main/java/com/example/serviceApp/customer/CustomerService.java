@@ -3,6 +3,7 @@ package com.example.serviceApp.customer;
 import com.example.serviceApp.EmailServiceImpl;
 import com.example.serviceApp.customer.Dto.devicedto.*;
 import com.example.serviceApp.device.Device;
+import com.example.serviceApp.device.DeviceRepository;
 import com.example.serviceApp.security.User.User;
 import com.example.serviceApp.security.User.UserRepository;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
@@ -26,8 +27,9 @@ import java.util.Optional;
 @Slf4j
     @RequiredArgsConstructor
     public class CustomerService {
+    private final DeviceRepository deviceRepository;
 
-        private final CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
         private final UserRepository userRepository;
         private final ModelMapper modelMapper;
         private final EmailServiceImpl emailService;
@@ -118,16 +120,17 @@ throw new IllegalArgumentException("Phone number taken");
     @Transactional
     @CacheEvict(value = "services", allEntries = true)
     public CustomerCreationDto2 createCustomer3ipol4(CustomerCreationDto2 customerDto){
-        if(customerDto.getDevice().getDeviceType()==null){
+        if(customerDto.getDevice()!=null&&customerDto.getDevice().getDeviceType()==null){
             throw new IllegalArgumentException("device type needed");//todo enum validator nedded
         }
+        log.info("Select creation customer");
         Customer handledCustomer = customerRepository.getCustomerWithDevicesByPhoneNumber(customerDto.getCustomer().getPhoneNumber())
                 .orElseGet(() -> createNewCustomer(customerDto));
         if (customerDto.getDevice() != null) {
             handleDevice(customerDto, handledCustomer);
         }
         Customer c= customerRepository.save(handledCustomer);
-
+        log.info("map customer");
         CustomerCreationDto2 mapped = CustomerCreationDto2
                 .builder()
                 .customer(CustomerCreationDto2.
@@ -138,16 +141,29 @@ throw new IllegalArgumentException("Phone number taken");
                         .lastName(c.getLastName())
                         .phoneNumber(c.getPhoneNumber()).build())
                 .build();
-        String deviceSerialNumber = customerDto.getDevice().getDeviceSerialNumber();
-        Device matchedDevice = c.getDevices().stream()
-                .filter(device -> device.getDeviceSerialNumber().equals(deviceSerialNumber))
-                .findFirst()
-                .orElse(null);
+        if (customerDto.getDevice()!=null) {
+            log.info("map device");
+            String deviceSerialNumber = customerDto.getDevice().getDeviceSerialNumber();
+            Device matchedDevice = c.getDevices().stream()
+                    .filter(device -> device.getDeviceSerialNumber().equals(deviceSerialNumber))
+                    .findFirst()
+                    .orElse(null);
 
-        mapped.setDevice(modelMapper.map(matchedDevice, CustomerCreationDto2.DeviceCreationDto.class));
-        List<ServiceRequest> serviceRequests = c.getDevices().get(0).getServiceRequestList();
-        ServiceRequest mappedRequest = serviceRequests.get(serviceRequests.size() - 1);
-        mapped.setServiceRequest(modelMapper.map(mappedRequest, CustomerCreationDto2.ServiceRequestCreationDto.class));
+            mapped.setDevice(modelMapper.map(matchedDevice, CustomerCreationDto2.DeviceCreationDto.class));
+            if(customerDto.getServiceRequest()!=null){
+                log.info("map sr");
+                List<ServiceRequest> serviceRequests = c.getDevices().get(0).getServiceRequestList();
+                if(serviceRequests.size()!=0){
+                    ServiceRequest mappedRequest = serviceRequests.get(serviceRequests.size() - 1);
+                    mapped.setServiceRequest(modelMapper.map(mappedRequest, CustomerCreationDto2.ServiceRequestCreationDto.class));
+                }
+
+
+            }
+
+
+        }
+
 
         return mapped;
     }
@@ -162,9 +178,8 @@ throw new IllegalArgumentException("Phone number taken");
     }
 
     private void handleDevice(CustomerCreationDto2 customerDto, Customer handledCustomer) {
-        Optional<Device>existingDevice =handledCustomer.getDevices().stream()
-                .filter(device -> device.getDeviceSerialNumber().equals(customerDto.getDevice().getDeviceSerialNumber()))
-                .findFirst();
+        log.info("select device");
+        Optional<Device> existingDevice = deviceRepository.getDeviceByDeviceSerialNumber(customerDto.getDevice().getDeviceSerialNumber());
 
         if (customerDto.getServiceRequest() != null) {
             handleServiceRequest(customerDto, handledCustomer, existingDevice);
@@ -174,6 +189,7 @@ throw new IllegalArgumentException("Phone number taken");
     }
 
     private void handleServiceRequest(CustomerCreationDto2 customerDto, Customer handledCustomer, Optional<Device> existingDevice) {
+        log.info("handleservicerequest");
         ServiceRequest newService = createNewService(customerDto);
         Device deviceToPersist;
         deviceToPersist = existingDevice.orElseGet(() -> buildDevice(customerDto.getDevice()));
@@ -184,9 +200,10 @@ throw new IllegalArgumentException("Phone number taken");
     }
 
     private ServiceRequest createNewService(CustomerCreationDto2 customerDto) {
+        log.info("create new service user select");
            User u = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()->new IllegalArgumentException());
         ServiceRequest newService = ServiceRequest.builder()
-                .startDate(LocalDate.now())
+                .startDate(LocalDateTime.now())
                 .lastStatus(ServiceRequest.Status.PENDING)
                 .description(customerDto.getServiceRequest().getDescription())
                 .price(customerDto.getServiceRequest().getPrice())

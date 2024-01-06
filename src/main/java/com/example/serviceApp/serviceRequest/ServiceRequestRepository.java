@@ -32,6 +32,8 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
 
     @EntityGraph(attributePaths = {"device", "statusHistory", "device.customer"})
     List<ServiceRequest> findAllByLastStatusNotOrderByIdDesc(ServiceRequest.Status status,Pageable pageable);
+    @EntityGraph(attributePaths = {"device", "statusHistory", "device.customer"})
+    List<ServiceRequest> findAllByLastStatusOrderByIdDesc(ServiceRequest.Status status,Pageable pageable);
 
     @Query("SELECT AVG(r.endDate-r.startDate) FROM ServiceRequest r")
     Double findAverageServiceDuration();

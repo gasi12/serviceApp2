@@ -43,7 +43,29 @@ public class ServiceRequestService {
 
     @Cacheable(value = "services", key = "#id")
     public ServiceRequestDtoAll findByIdWithAllDetails(Long id){
-return modelMapper.map(serviceRequestRepository.findWithDetailsById(id).orElseThrow(()-> new IllegalArgumentException("service not found")), ServiceRequestDtoAll.class);
+        ServiceRequest s = serviceRequestRepository.findWithDetailsById(id).orElseThrow(()-> new IllegalArgumentException("service not found"));
+        List<ServiceRequestDtoAll.StatusHistoryDtoAll> list = new ArrayList<>();
+        for(StatusHistory status :s.getStatusHistory()){
+           list.add(ServiceRequestDtoAll.StatusHistoryDtoAll.builder()
+                   .comment(status.getComment())
+                   .status(status.getStatus())
+                   .id(status.getId())
+                   .time(status.getTime())
+                   .build());
+        }
+           return ServiceRequestDtoAll.builder()
+                    .id(s.getId())
+                    .endDate(s.getEndDate())
+                    .price(s.getPrice())
+                    .lastStatus(s.getLastStatus())
+                    .startDate(s.getStartDate())
+                   .statusHistoryList(list)
+                   // .statusHistoryList(s.getStatusHistory().stream().map((element) -> modelMapper.map(element, ServiceRequestDtoAll.StatusHistoryDtoAll.class)).collect(Collectors.toList()))
+                    .description(s.getDescription())
+                    .customer(modelMapper.map(s.getDevice().getCustomer(), ServiceRequestDtoAll.DeviceDtoAll.CustomerDtoAll.class))
+                    .device(modelMapper.map(s.getDevice(), ServiceRequestDtoAll.DeviceDtoAll.class))
+                    .build();
+//return modelMapper.map(serviceRequestRepository.findWithDetailsById(id).orElseThrow(()-> new IllegalArgumentException("service not found")), ServiceRequestDtoAll.class);//todo znowu to nie dziala aaaaaaaaaaaaaaaaaaaaaaaa
     }
     @Cacheable(value = "services", key = "#page")
     public List<ServiceRequestSummaryDto> getServiceRequests(Integer page,Integer size) {
@@ -72,33 +94,21 @@ return modelMapper.map(serviceRequestRepository.findWithDetailsById(id).orElseTh
             throw new IllegalArgumentException("Service doesn't exist");
         }
     }
-    @Cacheable(value = "services", key = "#root.methodName + '_' + #status")
-public List<ServiceRequestSummaryDto> findByStatus(ServiceRequest.Status status) {
+    @Cacheable(value = "services", key = "#page")
+    public List<ServiceRequestSummaryDto> findByStatus(Integer page, Integer size, ServiceRequest.Status status) {
+        Pageable pageable = PageRequest.of(page,size);
+        List <ServiceRequest>allServices =  serviceRequestRepository.findAllByLastStatusOrderByIdDesc(status,pageable);
+        return mapToServiceRequestSummaryDtos(allServices);
+    }
 
-    List <ServiceRequest>allServices =  serviceRequestRepository.findAllByLastStatus(status);
-    return allServices.stream()
-            .map(s-> ServiceRequestSummaryDto
-                    .builder()
-                    .id(s.getId())
-                    .description(s.getDescription())
-                    .lastStatus(s.getLastStatus())
-                    .price(s.getPrice())
-                    .startDate(s.getStartDate())
-                    .deviceName(s.getDevice().getDeviceName())
-                    .customerFirstName(s.getDevice().getCustomer().getFirstName())
-                    .customerLastName(s.getDevice().getCustomer().getFirstName())
-                    .customerPhoneNumber(s.getDevice().getCustomer().getPhoneNumber())
-                    .build())
-            .collect(Collectors.toList());
-}
-    @CachePut(value = "services", key = "#serviceId")
+@CacheEvict(value = "services", allEntries = true)
     public StatusHistoryDto addStatus(Long serviceId, StatusHistoryDto status) {
         ServiceRequest serviceRequest = serviceRequestRepository.findById(serviceId).orElseThrow(() -> new IllegalArgumentException("Service " + serviceId + " not found"));
         List<StatusHistory> existingStatusList = serviceRequest.getStatusHistory();
         serviceRequest.setLastStatus(status.getStatus());
         StatusHistory statusToAdd = new StatusHistory(status.getStatus(), status.getComment(), serviceRequest, LocalDateTime.now());
         if (status.getStatus().equals(ServiceRequest.Status.FINISHED)) {
-            serviceRequest.setEndDate(LocalDate.now());
+            serviceRequest.setEndDate(LocalDateTime.now());
         }
         existingStatusList.add(statusToAdd);
         serviceRequest.setStatusHistory(existingStatusList);

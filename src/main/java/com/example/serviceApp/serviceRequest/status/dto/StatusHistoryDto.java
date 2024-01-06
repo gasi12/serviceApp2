@@ -20,8 +20,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StatusHistoryDto implements Serializable {
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private Long id;
     private ServiceRequest.Status status;
     private String comment;
-    @JsonProperty()
+
     private LocalDateTime time;
 }

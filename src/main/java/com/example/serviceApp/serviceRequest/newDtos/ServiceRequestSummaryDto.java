@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * DTO for {@link ServiceRequest}
@@ -23,8 +24,8 @@ public class ServiceRequestSummaryDto implements Serializable {
     private Long id;
     private String description;
     private ServiceRequest.Status lastStatus;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long price;
     private String deviceName;
     private Device.deviceType deviceType;

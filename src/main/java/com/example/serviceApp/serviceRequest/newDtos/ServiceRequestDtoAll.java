@@ -4,6 +4,7 @@ import com.example.serviceApp.device.Device;
 import com.example.serviceApp.serviceRequest.ServiceRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,15 +19,17 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceRequestDtoAll implements Serializable {
     private Long id;
     private String description;
-    private LocalDate startDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private Long price;
     private DeviceDtoAll device;
     private ServiceRequest.Status lastStatus;
-    private List<StatusHistoryDtoAll> statusHistory;
+    private List<StatusHistoryDtoAll> statusHistoryList;
     private DeviceDtoAll.CustomerDtoAll customer;
 
     /**
@@ -35,6 +38,7 @@ public class ServiceRequestDtoAll implements Serializable {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class DeviceDtoAll implements Serializable {
         private Long id;
@@ -48,6 +52,7 @@ public class ServiceRequestDtoAll implements Serializable {
          */
         @Data
         @AllArgsConstructor
+        @Builder
         @NoArgsConstructor
         @JsonIgnoreProperties(ignoreUnknown = true)
         public static class CustomerDtoAll implements Serializable {
@@ -64,6 +69,7 @@ public class ServiceRequestDtoAll implements Serializable {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class StatusHistoryDtoAll implements Serializable {
         private Long id;

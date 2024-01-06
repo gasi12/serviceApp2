@@ -18,6 +18,7 @@ public interface DeviceRepository extends JpaRepository<Device,Long> {
 @EntityGraph(attributePaths = {"serviceRequestList"})
     Optional<Device> getDeviceByDeviceSerialNumber(String serialNumber);
 
+
 Boolean existsByDeviceSerialNumber(String serialNumber);
 Optional<Device> findByDeviceSerialNumber(String serialNumber);
 }

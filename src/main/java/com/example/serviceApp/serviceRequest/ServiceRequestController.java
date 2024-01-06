@@ -98,8 +98,8 @@ public class ServiceRequestController {
 
     @GetMapping("/service/status/{status}")//ok
 
-    public List<ServiceRequestSummaryDto> findAllByStatus(@PathVariable ServiceRequest.Status status) {
-        return serviceRequestService.findByStatus(status);
+    public List<ServiceRequestSummaryDto> findAllByStatus(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer pageSize,@PathVariable ServiceRequest.Status status) {
+        return serviceRequestService.findByStatus(page, pageSize, status);
     }
 
     @GetMapping("/service/status/notfinished")//ok

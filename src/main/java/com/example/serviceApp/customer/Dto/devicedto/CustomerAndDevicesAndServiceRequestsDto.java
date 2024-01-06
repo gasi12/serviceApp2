@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -54,8 +55,8 @@ public class CustomerAndDevicesAndServiceRequestsDto implements Serializable {
             private Long id;
             private String description;
             private ServiceRequest.Status lastStatus;
-            private LocalDate endDate;
-            private LocalDate startDate;
+            private LocalDateTime endDate;
+            private LocalDateTime startDate;
             private Long price;
         }
     }

@@ -15,6 +15,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -48,10 +49,10 @@ public class ServiceRequest {
     private Status lastStatus = Status.PENDING;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 
-    private LocalDate endDate;
+    private LocalDateTime endDate;
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
-    private LocalDate startDate;
+    //@Temporal(TemporalType.DATE)
+    private LocalDateTime startDate;
 
     private Long price;
 
@@ -72,7 +73,7 @@ public class ServiceRequest {
     private List<StatusHistory> statusHistory;
 
 
-    public ServiceRequest(String description, Status lastStatus, LocalDate endDate, LocalDate startDate, Long price, Device device) {
+    public ServiceRequest(String description, Status lastStatus, LocalDateTime endDate, LocalDateTime startDate, Long price, Device device) {
         this.description = description;
         this.lastStatus = lastStatus;
         this.endDate = endDate;
